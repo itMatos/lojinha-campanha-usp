@@ -9,7 +9,7 @@ import EstoqueScreen from '@/screens/EstoqueScreen';
 import HistoricoScreen from '@/screens/HistoricoScreen';
 
 const IndexScreen = () => {
-    return <VendasScreen />;
+    return <EstoqueScreen />;
 };
 const renderEstoqueScreen = () => {
     return <EstoqueScreen />;
