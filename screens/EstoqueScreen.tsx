@@ -8,7 +8,6 @@ import CardItemEstoque from '@/components/CardItemEstoque';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
 import AdicionarProduto from '@/components/AdicionarProduto';
-import { useNavigation } from '@react-navigation/native';
 
 const vh = Dimensions.get('window').height / 100;
 
