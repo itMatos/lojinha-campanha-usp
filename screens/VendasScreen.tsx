@@ -6,6 +6,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardItemVenda from '@/components/CardItemVenda';
 import { ScrollView } from 'react-native';
+import { Dimensions } from 'react-native';
+
+const vh = Dimensions.get('window').height / 100;
 
 interface ItemType {
     id: number;
@@ -52,13 +55,13 @@ export default function VendasScreen() {
             <StatusBar barStyle="dark-content" backgroundColor="white" />
 
             <Appbar.Header mode="center-aligned" elevated>
-                <Appbar.BackAction onPress={() => {}} />
+                {/* <Appbar.BackAction onPress={() => {}} /> */}
                 <Appbar.Content title="Vendas" />
                 <Appbar.Action icon="magnify" onPress={() => {}} />
             </Appbar.Header>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
+                <View style={styles.listVendas}>
                     {itens.map((item) => (
                         <View key={item.id}>
                             <CardItemVenda itemVenda={item} onChangeQuantity={handleChangeQuantity} />
@@ -74,5 +77,8 @@ const styles = StyleSheet.create({
     listItems: {
         alignSelf: 'center',
         flex: 1,
+    },
+    listVendas: {
+        paddingBottom: 10 * vh,
     },
 });

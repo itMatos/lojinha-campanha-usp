@@ -66,6 +66,7 @@ export default function CardItemVenda({ itemVenda, onChangeQuantity }: CardItemV
 const styles = StyleSheet.create({
     card: {
         margin: 10,
+        marginHorizontal: 40,
     },
     chip: {
         flex: 1,

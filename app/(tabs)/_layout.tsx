@@ -7,56 +7,49 @@ import { BottomNavigation } from 'react-native-paper';
 import VendasScreen from '@/screens/VendasScreen';
 import EstoqueScreen from '@/screens/EstoqueScreen';
 import HistoricoScreen from '@/screens/HistoricoScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 
-const IndexScreen = () => {
+const RenderVendasScreen = () => {
     return <VendasScreen />;
 };
-const renderEstoqueScreen = () => {
+const RenderEstoqueScreen = () => {
     return <EstoqueScreen />;
 };
-const renderHistoricoScreen = () => {
+const RenderHistoricoScreen = () => {
     return <HistoricoScreen />;
 };
 
+const Tab = createMaterialBottomTabNavigator();
+
 export default function TabLayout() {
     const colorScheme = useColorScheme();
-    const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        {
-            key: 'vendas',
-            title: 'Vendas',
-            focusedIcon: 'cart-outline',
-        },
-        {
-            key: 'estoque',
-            title: 'Estoque',
-            focusedIcon: 'warehouse',
-        },
-        {
-            key: 'historico',
-            title: 'Histórico',
-            focusedIcon: 'history',
-        },
-    ]);
-
-    const renderScene = BottomNavigation.SceneMap({
-        vendas: IndexScreen,
-        estoque: renderEstoqueScreen,
-        historico: renderHistoricoScreen,
-    });
-
     return (
-        <SafeAreaView style={styles.container}>
-            <BottomNavigation
-                navigationState={{ index, routes: routes as { key: string }[] }}
-                onIndexChange={(newIndex) => {
-                    setIndex(newIndex);
+        <Tab.Navigator>
+            <Tab.Screen
+                name="Vendas"
+                component={RenderVendasScreen}
+                options={{
+                    tabBarLabel: 'Vendas',
+                    tabBarIcon: 'cart-outline',
                 }}
-                renderScene={renderScene}
-                activeColor={Colors[colorScheme ?? 'light'].tint}
-                barStyle={{ backgroundColor: Colors[colorScheme ?? 'light'].tabIconDefault }}
             />
-        </SafeAreaView>
+            <Tab.Screen
+                name="Estoque"
+                component={RenderEstoqueScreen}
+                options={{
+                    tabBarLabel: 'Estoque',
+                    tabBarIcon: 'warehouse',
+                }}
+            />
+            <Tab.Screen
+                name="Histórico"
+                component={RenderEstoqueScreen}
+                options={{
+                    tabBarIcon: 'history',
+                }}
+            />
+        </Tab.Navigator>
     );
 }
 
