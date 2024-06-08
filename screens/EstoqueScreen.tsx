@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, FAB } from 'react-native-paper';
+import { Appbar, FAB, Portal, Text, PaperProvider, Button, Modal } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardItemEstoque from '@/components/CardItemEstoque';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
+import AdicionarProduto from '@/components/AdicionarProduto';
+import { useNavigation } from '@react-navigation/native';
 
 const vh = Dimensions.get('window').height / 100;
 
@@ -22,6 +24,12 @@ interface ItemEstoqueType {
 }
 
 export default function EstoqueScreen() {
+    const [visible, setVisible] = React.useState(false);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = { backgroundColor: 'white', padding: 20 };
+
     const [itens, setItens] = useState<ItemEstoqueType[]>([
         {
             id: 1,
@@ -52,67 +60,63 @@ export default function EstoqueScreen() {
 
     const { open } = state;
 
-    const [showModal, setShowModal] = useState(false);
     const [novoProduto, setNovoProduto] = useState<ItemEstoqueType>({
         id: -1,
         produto: { id: -1, nome: '', descricao: '', preco: 0 },
         quantidade: 0,
     });
 
-    // const handleAdicionarProduto = () => {
-    //     setItens([...itens, novoProduto]);
-    //     setNovoProduto({
-    //         id: null, // Gere um novo ID único para o próximo produto
-    //         produto: { id: null, nome: '', descricao: '', preco: 0 },
-    //         quantidade: 0,
-    //     });
-    //     setShowModal(false);
-    // };
-
     return (
-        <View style={{ flex: 1 }}>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <>
+            <View style={{ flex: 1 }}>
+                <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-            <Appbar.Header mode="center-aligned" elevated>
-                <Appbar.BackAction onPress={() => {}} />
-                <Appbar.Content title="Estoque" />
-                <Appbar.Action icon="magnify" onPress={() => {}} />
-            </Appbar.Header>
+                <Appbar.Header mode="center-aligned" elevated>
+                    {/* <Appbar.BackAction onPress={() => {}} /> */}
+                    <Appbar.Content title="Estoque" />
+                    <Appbar.Action icon="magnify" onPress={() => {}} />
+                </Appbar.Header>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.listEstoque}>
-                    {itens.map((item) => (
-                        <View key={item.id}>
-                            <CardItemEstoque itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
-                        </View>
-                    ))}
-                </View>
-            </ScrollView>
-            <FAB.Group
-                open={open}
-                visible
-                icon={open ? 'plus-circle' : 'plus'}
-                actions={[
-                    {
-                        icon: 'shape-plus',
-                        label: 'Combo',
-                        onPress: () => console.log('Pressed produto'),
-                    },
-                    {
-                        icon: 'plus-box',
-                        label: 'Individual',
-                        onPress: () => setShowModal(true),
-                    },
-                ]}
-                onStateChange={onStateChange}
-                onPress={() => {
-                    if (open) {
-                        // do something if the speed dial is open
-                    }
-                }}
-                fabStyle={styles.fabAction}
-            />
-        </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.listEstoque}>
+                        {itens.map((item) => (
+                            <View key={item.id}>
+                                <CardItemEstoque itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
+                            </View>
+                        ))}
+                    </View>
+                </ScrollView>
+
+                <FAB.Group
+                    open={open}
+                    visible
+                    icon={open ? 'plus-circle' : 'plus'}
+                    actions={[
+                        {
+                            icon: 'shape-plus',
+                            label: 'Combo',
+                            onPress: () => console.log('Pressed produto'),
+                        },
+                        {
+                            icon: 'plus-box',
+                            label: 'Individual',
+                            onPress: showModal,
+                        },
+                    ]}
+                    onStateChange={onStateChange}
+                    onPress={() => {
+                        if (open) {
+                            // do something if the speed dial is open
+                        }
+                    }}
+                    fabStyle={styles.fabAction}
+                />
+            </View>
+
+            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                <AdicionarProduto />
+            </Modal>
+        </>
     );
 }
 
