@@ -32,7 +32,7 @@ export default function CardItemVenda({ itemVenda, onChangeQuantity }: CardItemV
     return (
         <View>
             <Card elevation={1} style={styles.card}>
-                <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+                <Card.Cover source={{ uri: 'https://i.postimg.cc/7ZdzqFMv/undraw-dev-productivity-umsq.png' }} />
                 <Card.Content>
                     <Text variant="titleLarge">{itemVenda.produto.nome}</Text>
                     <Text variant="bodyMedium">{itemVenda.produto.descricao}</Text>

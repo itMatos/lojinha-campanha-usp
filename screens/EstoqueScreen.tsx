@@ -113,7 +113,9 @@ export default function EstoqueScreen() {
             </View>
 
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <AdicionarProduto />
+            </ScrollView>
             </Modal>
         </>
     );
