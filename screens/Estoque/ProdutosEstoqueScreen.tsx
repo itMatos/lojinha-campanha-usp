@@ -124,7 +124,7 @@ export default function ProdutosEstoqueScreen({ navigation }: { navigation: any 
                         {
                             icon: 'shape-plus',
                             label: 'Combo',
-                            onPress: () => console.log('Pressed produto'),
+                            onPress: () => navigation.navigate('AdicionarCombo'),
                         },
                         {
                             icon: 'plus-box',

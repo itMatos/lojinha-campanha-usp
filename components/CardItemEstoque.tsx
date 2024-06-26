@@ -39,8 +39,8 @@ export default function CardItemEstoque({ itemEstoque, onChangeQuantity }: CardI
                 <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
                 <Card.Content>
                     <Text variant="titleLarge">{itemEstoque.nome}</Text>
-                    <Text variant="bodyMedium">{itemEstoque.descricao}</Text>
-                    <Text variant="bodyMedium">{itemEstoque.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                    <Text variant="bodyLarge">{itemEstoque.descricao}</Text>
+                    <Text variant="titleMedium">{itemEstoque.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                 </Card.Content>
 
                 <Card.Actions style={{ flexDirection: 'row' }}>

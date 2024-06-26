@@ -65,7 +65,7 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
             <PaperProvider theme={paperTheme}>
                 <Appbar.Header mode="center-aligned" elevated>
                     <Appbar.BackAction onPress={showDialog} />
-                    <Appbar.Content title="Estoque" />
+                    <Appbar.Content title="Adicionar produto" />
                     {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
                 </Appbar.Header>
                 <ScrollView showsVerticalScrollIndicator={false}>
