@@ -10,15 +10,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const vh = Dimensions.get('window').height / 100;
 
+interface ItemComboType {
+    id: string;
+    nome: string;
+    quantidade: number | 0;
+}
 interface ItemEstoqueType {
-    id: number;
-    produto: {
-        id: number;
-        nome: string;
-        descricao: string;
-        preco: number;
-    };
-    quantidade: number;
+    id: string;
+    nome: string;
+    descricao?: string | '';
+    preco: number;
+    eh_combo: boolean;
+    quantidade_estoque: number | 0;
+    combo_products?: ItemComboType[];
 }
 
 export default function ProdutosEstoqueScreen({ navigation }: { navigation: any }) {
@@ -30,25 +34,49 @@ export default function ProdutosEstoqueScreen({ navigation }: { navigation: any 
 
     const [itens, setItens] = useState<ItemEstoqueType[]>([
         {
-            id: 1,
-            produto: { id: 1, nome: 'Caneca', descricao: '1 Caneca Campanha', preco: 20.0 },
-            quantidade: 20,
+            id: '6664576a490582f51482d1c8',
+            nome: 'broche laranja',
+            preco: 5,
+            eh_combo: false,
+            combo_products: [],
+            quantidade_estoque: 0,
         },
         {
-            id: 2,
-            produto: { id: 2, nome: 'Camiseta Azul', descricao: '1 Camiseta Tamanho M', preco: 13.0 },
-            quantidade: 15,
+            id: '66645957bb9a1a5ec7f1874f',
+            nome: 'combo 2 broches laranja',
+            preco: 12,
+            eh_combo: true,
+            quantidade_estoque: 0,
+            combo_products: [
+                {
+                    id: '66645957bb9a1a5ec7f18750',
+                    nome: 'broche laranja',
+                    quantidade: 2,
+                },
+            ],
         },
         {
-            id: 3,
-            produto: { id: 3, nome: 'Camiseta laranja', descricao: '1 Camiseta Tamanho P', preco: 13.0 },
-            quantidade: 13,
+            id: '667ac28ddd88cc8ad8de6854',
+            nome: 'broche rosa',
+            preco: 7,
+            quantidade_estoque: 0,
+            eh_combo: false,
+            combo_products: [],
+        },
+        {
+            id: '667c6daf8610658233de73fc',
+            nome: 'teste italooooo',
+            descricao: 'descricao teste italo',
+            preco: 3.14,
+            quantidade_estoque: 12,
+            eh_combo: false,
+            combo_products: [],
         },
     ]);
 
-    const handleChangeQuantity = (itemId: number, newQuantity: number) => {
+    const handleChangeQuantity = (itemId: string, newQuantity: number) => {
         setItens((prevItens) =>
-            prevItens.map((item) => (item.id === itemId ? { ...item, quantidade: newQuantity, valorTotal: item.produto.preco * newQuantity } : item))
+            prevItens.map((item) => (item.id === itemId ? { ...item, quantidade: newQuantity, valorTotal: item.preco * newQuantity } : item))
         );
     };
 
@@ -59,9 +87,12 @@ export default function ProdutosEstoqueScreen({ navigation }: { navigation: any 
     const { open } = state;
 
     const [novoProduto, setNovoProduto] = useState<ItemEstoqueType>({
-        id: -1,
-        produto: { id: -1, nome: '', descricao: '', preco: 0 },
-        quantidade: 0,
+        id: '-1',
+        nome: '',
+        descricao: '',
+        preco: 0,
+        quantidade_estoque: 0,
+        eh_combo: false,
     });
 
     return (
