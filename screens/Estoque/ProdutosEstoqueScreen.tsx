@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, FAB, Portal, Text, PaperProvider, Button, Modal } from 'react-native-paper';
+import { Appbar, FAB } from 'react-native-paper';
 import { StatusBar } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardItemEstoque from '@/components/CardItemEstoque';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
-import AdicionarProduto from '@/components/AdicionarProduto';
+import AdicionarProduto from './AdicionarProdutoScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const vh = Dimensions.get('window').height / 100;
 
@@ -22,7 +21,7 @@ interface ItemEstoqueType {
     quantidade: number;
 }
 
-export default function EstoqueScreen() {
+export default function ProdutosEstoqueScreen({ navigation }: { navigation: any }) {
     const [visible, setVisible] = React.useState(false);
 
     const showModal = () => setVisible(true);
@@ -71,7 +70,7 @@ export default function EstoqueScreen() {
                 <StatusBar barStyle="dark-content" backgroundColor="white" />
 
                 <Appbar.Header mode="center-aligned" elevated>
-                    {/* <Appbar.BackAction onPress={() => {}} /> */}
+                    {/* <Appbar.BackAction onPress={() => navigation.navigate('ProdutosEstoque')} /> */}
                     <Appbar.Content title="Estoque" />
                     <Appbar.Action icon="magnify" onPress={() => {}} />
                 </Appbar.Header>
@@ -99,24 +98,18 @@ export default function EstoqueScreen() {
                         {
                             icon: 'plus-box',
                             label: 'Individual',
-                            onPress: showModal,
+                            onPress: () => navigation.navigate('AdicionarProduto'),
                         },
                     ]}
                     onStateChange={onStateChange}
                     onPress={() => {
                         if (open) {
-                            // do something if the speed dial is open
+                            // do something
                         }
                     }}
                     fabStyle={styles.fabAction}
                 />
             </View>
-
-            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <AdicionarProduto />
-            </ScrollView>
-            </Modal>
         </>
     );
 }
