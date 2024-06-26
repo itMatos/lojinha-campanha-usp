@@ -1,20 +1,18 @@
 import React from 'react';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from 'react-native';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import VendasScreen from '@/screens/VendasScreen';
 import HistoricoScreen from '@/screens/HistoricoScreen';
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, BottomNavigation } from 'react-native-paper';
+import { BottomNavigation, PaperProvider } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EstoqueTabScreens from '@/screens/Estoque/EstoqueScreens';
 
-const Tab = createBottomTabNavigator();
-
 export default function TabLayout() {
-    const colorScheme = useColorScheme();
+    const Tab = createBottomTabNavigator();
+
     return (
         <Tab.Navigator
             id="(tabs)"

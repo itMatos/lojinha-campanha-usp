@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Appbar, Button, TextInput } from 'react-native-paper';
+import { StyleSheet, View, Dimensions, useColorScheme } from 'react-native';
+import { Appbar, Button, Dialog, PaperProvider, Portal, Text, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
 import ImageViewer from '../../components/ImageViewer';
 import { ScrollView } from 'react-native';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
+import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -14,6 +15,15 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
     const [produtoDescricao, setProdutoDescricao] = useState('');
     const [produtoPreco, setProdutoPreco] = useState('0,00');
     const [selectedImage, setSelectedImage] = useState<string>('');
+    const [visible, setVisible] = useState(false);
+
+    const colorScheme = useColorScheme();
+    const { theme } = useMaterial3Theme();
+
+    const paperTheme = colorScheme !== 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light };
+
+    const showDialog = () => setVisible(true);
+    const hideDialog = () => setVisible(false);
 
     const handlePrecoChange = (text: string) => {
         text = text.replace('.', '').replace(',', '').replace(/\D/g, '');
@@ -32,6 +42,11 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
         console.log('Preço: ' + produtoPreco);
     };
 
+    const handleButtonVoltar = () => {
+        navigation.navigate('ProdutosEstoque');
+        hideDialog();
+    };
+
     const pickImageAsync = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -47,59 +62,76 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
 
     return (
         <>
-            <Appbar.Header mode="center-aligned" elevated>
-                <Appbar.BackAction onPress={() => navigation.navigate('ProdutosEstoque')} />
-                <Appbar.Content title="Estoque" />
-                {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
-            </Appbar.Header>
-            <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <PaperProvider theme={paperTheme}>
+                <Appbar.Header mode="center-aligned" elevated>
+                    <Appbar.BackAction onPress={showDialog} />
+                    <Appbar.Content title="Estoque" />
+                    {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
+                </Appbar.Header>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.container}>
-                        <View style={styles.formContainer}>
-                            <TextInput
-                                label="Nome"
-                                value={produtoNome}
-                                onChangeText={(text) => setProdutoNome(text)}
-                                style={{ margin: 10 }}
-                                mode="outlined"
-                            />
-                            <TextInput
-                                label="Descrição"
-                                value={produtoDescricao}
-                                onChangeText={(text) => setProdutoDescricao(text)}
-                                style={{ margin: 10 }}
-                                mode="outlined"
-                            />
-                            <TextInput
-                                label="Preço"
-                                value={produtoPreco}
-                                onChangeText={(text) => handlePrecoChange(text)}
-                                keyboardType="numeric"
-                                style={{ margin: 10 }}
-                                mode="outlined"
-                            />
-                        </View>
+                    <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <View style={styles.container}>
-                            <Button onPress={pickImageAsync}>Choose a photo</Button>
-                            <View style={styles.imageContainer}>
-                                <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
+                            <View style={styles.formContainer}>
+                                <TextInput
+                                    label="Nome"
+                                    value={produtoNome}
+                                    onChangeText={(text) => setProdutoNome(text)}
+                                    style={{ margin: 10 }}
+                                    mode="outlined"
+                                />
+                                <TextInput
+                                    label="Descrição"
+                                    value={produtoDescricao}
+                                    onChangeText={(text) => setProdutoDescricao(text)}
+                                    style={{ margin: 10 }}
+                                    mode="outlined"
+                                />
+                                <TextInput
+                                    label="Preço"
+                                    value={produtoPreco}
+                                    onChangeText={(text) => handlePrecoChange(text)}
+                                    keyboardType="numeric"
+                                    style={{ margin: 10 }}
+                                    mode="outlined"
+                                />
+                            </View>
+                            <View style={styles.container}>
+                                <Button onPress={pickImageAsync}>Choose a photo</Button>
+                                <View style={styles.imageContainer}>
+                                    <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={styles.buttonsContainer}>
-                        <View style={styles.buttonAction}>
-                            <Button mode="contained" onPress={() => handleAdicionarProduto} disabled>
-                                Adicionar
-                            </Button>
+                        <View style={styles.buttonsContainer}>
+                            <View style={styles.buttonAction}>
+                                <Button mode="contained" onPress={() => handleAdicionarProduto}>
+                                    Adicionar
+                                </Button>
+                            </View>
+                            <View style={styles.buttonAction}>
+                                <Button mode="outlined" onPress={showDialog}>
+                                    Voltar
+                                </Button>
+                            </View>
                         </View>
-                        <View style={styles.buttonAction}>
-                            <Button mode="outlined" onPress={() => console.log('cancelar')}>
-                                Cancelar
-                            </Button>
+
+                        <View>
+                            <Portal>
+                                <Dialog visible={visible} onDismiss={hideDialog}>
+                                    <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
+                                    <Dialog.Content>
+                                        <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                    </Dialog.Content>
+                                    <Dialog.Actions>
+                                        <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
+                                        <Button onPress={hideDialog}>Cancelar</Button>
+                                    </Dialog.Actions>
+                                </Dialog>
+                            </Portal>
                         </View>
                     </View>
                 </ScrollView>
-            </View>
+            </PaperProvider>
         </>
     );
 }
@@ -133,7 +165,6 @@ const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 2,
         marginBottom: 16,
-        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
