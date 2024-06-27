@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, useColorScheme } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import { ProdutoIndividualType } from '@/types/types';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const vw = Dimensions.get('window').width / 100;
 

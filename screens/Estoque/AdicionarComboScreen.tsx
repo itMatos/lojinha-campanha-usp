@@ -10,10 +10,51 @@ import { Menu, Divider } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AdicionarItemCombo from '@/components/AdicionarItemCombo';
-import { ItemComboType, ProdutoComboType, ProdutoIndividualType } from '@/types/types';
+import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
+
+const listaDeProdutos = [
+    {
+        id: '6664576a490582f51482d1c8',
+        nome: 'broche laranja',
+        preco: 5,
+        eh_combo: false,
+        combo_products: [],
+        quantidade_estoque: 0,
+    } as ProdutoIndividualType,
+    {
+        id: '66645957bb9a1a5ec7f1874f',
+        nome: 'combo 2 broches laranja',
+        preco: 12,
+        eh_combo: true,
+        combo_products: [
+            {
+                nome: 'broche laranja',
+                quantidade: 2,
+                id: '66645957bb9a1a5ec7f18750',
+            },
+        ],
+    } as ProdutoComboType,
+    {
+        id: '667ac28ddd88cc8ad8de6854',
+        nome: 'broche rosa',
+        preco: 7,
+        quantidade_estoque: 0,
+        eh_combo: false,
+        combo_products: [],
+    } as ProdutoIndividualType,
+    {
+        id: '667c6daf8610658233de73fc',
+        nome: 'teste italooooo',
+        descricao: 'descricao teste italo',
+        preco: 3.14,
+        quantidade_estoque: 12,
+        eh_combo: false,
+        combo_products: [],
+    } as ProdutoIndividualType,
+];
 
 export default function AdicionarComboScreen({ navigation }: { navigation: any }) {
     const [produtoNome, setProdutoNome] = useState('');
@@ -21,10 +62,11 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
     const [produtoPreco, setProdutoPreco] = useState('0');
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [visible, setVisible] = useState(false);
-    const [visibleMenu, setVisibleMenu] = useState(false);
     const [teste, setTeste] = useState(['teste']);
     const [itensDoCombo, setItensDoCombo] = useState<ItemComboType[]>([]);
     const [produtoComboNome, setProdutoComboNome] = useState('');
+
+    const [produtos, setProdutos] = useState<ProdutosType[]>(listaDeProdutos);
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -33,10 +75,6 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
 
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
-
-    const openMenu = () => setVisibleMenu(true);
-
-    const closeMenu = () => setVisibleMenu(false);
 
     const handlePrecoChange = (text: string) => {
         text = text.replace('.', '').replace(',', '').replace(/\D/g, '');
@@ -152,33 +190,6 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
 
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View>
-                        {/* <PaperProvider>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                paddingTop: 25,
-                                width: '80%',
-                            }}
-                        >
-                            <Menu
-                                visible={visibleMenu}
-                                onDismiss={closeMenu}
-                                anchor={
-                                    <Chip onPress={openMenu} style={{ width: '80%', justifyContent: 'center' }}>
-                                        Selecione o item aaaaaaaaaaa
-                                    </Chip>
-                                }
-                                style={{ width: '80%', justifyContent: 'center', marginTop: -25 }}
-                            >
-                                <Menu.Item onPress={() => {}} title="Item 1" />
-                                <Menu.Item onPress={() => {}} title="Item 2" />
-                                <Divider />
-                                <Menu.Item onPress={() => {}} title="Item 3" />
-                            </Menu>
-                        </View>
-                    </PaperProvider> */}
-
                         <Text variant="titleLarge" style={{ margin: 20 }}>
                             Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente para aparecer na listagem.
                         </Text>
@@ -201,10 +212,9 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
                                 </View>
                             ))}
 
-                            {/* <AdicionarItemCombo itens={itens} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} /> */}
                             <Divider />
                             <Button mode="contained" onPress={AdicionarFormCombo} style={{ margin: 20 }}>
-                                Adicionar outro
+                                Adicionar outro produto
                             </Button>
                         </View>
 

@@ -4,7 +4,7 @@ export type ProdutoIndividualType = {
     descricao?: string;
     preco: number;
     eh_combo: false;
-    combo_products: [];
+    combo_products?: [];
     quantidade_estoque: number;
 };
 
@@ -24,4 +24,4 @@ export type ItemComboType = {
     quantidade: number;
 };
 
-export type EstoqueType = ProdutoIndividualType | ProdutoComboType;
+export type ProdutosType = ProdutoIndividualType | ProdutoComboType;

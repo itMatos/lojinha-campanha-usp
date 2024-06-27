@@ -1,78 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Appbar, FAB } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import CardItemEstoque from '@/components/CardItemEstoque';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
-import AdicionarProduto from './AdicionarProdutoScreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 
 const vh = Dimensions.get('window').height / 100;
 
-interface ItemComboType {
-    id: string;
-    nome: string;
-    quantidade: number | 0;
-}
-interface ItemEstoqueType {
-    id: string;
-    nome: string;
-    descricao?: string | '';
-    preco: number;
-    eh_combo: boolean;
-    quantidade_estoque: number | 0;
-    combo_products?: ItemComboType[];
-}
-
-export default function ProdutosEstoqueScreen({ navigation }: { navigation: any }) {
-    const [visible, setVisible] = React.useState(false);
-
-    const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 20 };
-
-    const [itens, setItens] = useState<ItemEstoqueType[]>([
-        {
-            id: '6664576a490582f51482d1c8',
-            nome: 'broche laranja',
-            preco: 5,
-            eh_combo: false,
-            combo_products: [],
-            quantidade_estoque: 0,
-        },
-        {
-            id: '66645957bb9a1a5ec7f1874f',
-            nome: 'combo 2 broches laranja',
-            preco: 12,
-            eh_combo: true,
-            quantidade_estoque: 0,
-            combo_products: [
-                {
-                    id: '66645957bb9a1a5ec7f18750',
-                    nome: 'broche laranja',
-                    quantidade: 2,
-                },
-            ],
-        },
-        {
-            id: '667ac28ddd88cc8ad8de6854',
-            nome: 'broche rosa',
-            preco: 7,
-            quantidade_estoque: 0,
-            eh_combo: false,
-            combo_products: [],
-        },
-        {
-            id: '667c6daf8610658233de73fc',
-            nome: 'teste italooooo',
-            descricao: 'descricao teste italo',
-            preco: 3.14,
-            quantidade_estoque: 12,
-            eh_combo: false,
-            combo_products: [],
-        },
-    ]);
+export default function ProdutosEstoqueScreen({ navigation, route }: { navigation: any; route: any }) {
+    const { items }: { items: ProdutosType[] } = route.params;
+    const [itens, setItens] = useState<ProdutosType[]>(items);
+    console.log('testando tela de produtos do estoque', items);
 
     const handleChangeQuantity = (itemId: string, newQuantity: number) => {
         setItens((prevItens) =>
@@ -80,20 +20,15 @@ export default function ProdutosEstoqueScreen({ navigation }: { navigation: any 
         );
     };
 
-    const [state, setState] = React.useState({ open: false });
+    const [state, setState] = useState({ open: false });
 
     const onStateChange = ({ open }: { open: boolean }) => setState({ open });
 
     const { open } = state;
 
-    const [novoProduto, setNovoProduto] = useState<ItemEstoqueType>({
-        id: '-1',
-        nome: '',
-        descricao: '',
-        preco: 0,
-        quantidade_estoque: 0,
-        eh_combo: false,
-    });
+    useEffect(() => {
+        setItens(items);
+    }, [items]);
 
     return (
         <>
@@ -129,7 +64,12 @@ export default function ProdutosEstoqueScreen({ navigation }: { navigation: any 
                         {
                             icon: 'plus-box',
                             label: 'Individual',
-                            onPress: () => navigation.navigate('AdicionarProduto'),
+                            onPress: () =>
+                                navigation.navigate({
+                                    name: 'AdicionarProduto',
+                                    params: { items: itens },
+                                    merge: true,
+                                }),
                         },
                     ]}
                     onStateChange={onStateChange}

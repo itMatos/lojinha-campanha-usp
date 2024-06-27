@@ -28,7 +28,7 @@ export default function CardItemEstoque({ itemEstoque, onChangeQuantity }: CardI
     };
 
     const handleSubtractQuantidade = () => {
-        if (itemEstoque.quantidade_estoque > 1) {
+        if (itemEstoque.quantidade_estoque >= 1) {
             onChangeQuantity(itemEstoque.id, itemEstoque.quantidade_estoque - 1);
         }
     };

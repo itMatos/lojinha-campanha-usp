@@ -6,16 +6,23 @@ import ImageViewer from '../../components/ImageViewer';
 import { ScrollView } from 'react-native';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
+import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
 
-export default function AdicionarProdutoScreen({ navigation }: { navigation: any }) {
+export default function AdicionarProdutoScreen({ navigation, route }: { navigation: any; route: any }) {
+    const { items }: { items: ProdutosType[] } = route.params;
     const [produtoNome, setProdutoNome] = useState('');
     const [produtoDescricao, setProdutoDescricao] = useState('');
     const [produtoPreco, setProdutoPreco] = useState('0,00');
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [visible, setVisible] = useState(false);
+    const [quantidadeProduto, setQuantidadeProduto] = useState('0');
+
+    const [itens, setItens] = useState<ProdutosType[]>(items);
+
+    console.log('isso vem de params', items);
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -34,12 +41,29 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
         result ? setProdutoPreco(result) : setProdutoPreco('0,00');
     };
 
-    const handleAdicionarProduto = () => {
+    const handleAdicionarProdutoIndividual = () => {
         // adicionar endpoint para adicionar produto
-        console.log('Adicionar produto');
-        console.log('Nome: ' + produtoNome);
-        console.log('Descrição: ' + produtoDescricao);
-        console.log('Preço: ' + produtoPreco);
+        const testeId = (Math.random() * (8000 - 1000) + 1000).toString();
+        const novoProduto: ProdutoIndividualType = {
+            id: testeId,
+            nome: produtoNome,
+            descricao: produtoDescricao,
+            preco: parseFloat(produtoPreco.replace(',', '.')),
+            eh_combo: false,
+            quantidade_estoque: parseInt(quantidadeProduto),
+        };
+        console.log('Novo produto:', novoProduto);
+        const newItems = [...items, novoProduto];
+        setItens(newItems);
+        console.log('Novos itens:', newItems);
+
+        navigation.navigate({
+            name: 'ProdutosEstoque',
+            params: {
+                items: newItems,
+            },
+            merge: true,
+        });
     };
 
     const handleButtonVoltar = () => {
@@ -94,6 +118,14 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
                                     style={{ margin: 10 }}
                                     mode="outlined"
                                 />
+                                <TextInput
+                                    label="Quantidade em estoque"
+                                    value={quantidadeProduto}
+                                    onChangeText={(text) => setQuantidadeProduto(text)}
+                                    keyboardType="numeric"
+                                    style={{ margin: 10 }}
+                                    mode="outlined"
+                                />
                             </View>
                             <View style={styles.container}>
                                 <Button onPress={pickImageAsync}>Choose a photo</Button>
@@ -104,7 +136,7 @@ export default function AdicionarProdutoScreen({ navigation }: { navigation: any
                         </View>
                         <View style={styles.buttonsContainer}>
                             <View style={styles.buttonAction}>
-                                <Button mode="contained" onPress={() => handleAdicionarProduto}>
+                                <Button mode="contained" onPress={handleAdicionarProdutoIndividual}>
                                     Adicionar
                                 </Button>
                             </View>
