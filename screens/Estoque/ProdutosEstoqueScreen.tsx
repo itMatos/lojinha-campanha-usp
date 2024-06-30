@@ -59,7 +59,12 @@ export default function ProdutosEstoqueScreen({ navigation, route }: { navigatio
                         {
                             icon: 'shape-plus',
                             label: 'Combo',
-                            onPress: () => navigation.navigate('AdicionarCombo'),
+                            onPress: () =>
+                                navigation.navigate({
+                                    name: 'AdicionarCombo',
+                                    params: { items: itens },
+                                    merge: true,
+                                }),
                         },
                         {
                             icon: 'plus-box',
