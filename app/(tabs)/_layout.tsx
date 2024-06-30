@@ -14,86 +14,94 @@ export default function TabLayout() {
     const Tab = createBottomTabNavigator();
 
     return (
-        <Tab.Navigator
-            id="(tabs)"
-            initialRouteName="Vendas"
-            screenOptions={{
-                headerShown: false,
-            }}
-            tabBar={({ navigation, state, descriptors, insets }) => (
-                <BottomNavigation.Bar
-                    navigationState={state}
-                    safeAreaInsets={insets}
-                    onTabPress={({ route, preventDefault }) => {
-                        const event = navigation.emit({
-                            type: 'tabPress',
-                            target: route.key,
-                            canPreventDefault: true,
-                        });
-
-                        if (event.defaultPrevented) {
-                            preventDefault();
-                        } else {
-                            navigation.dispatch({
-                                ...CommonActions.navigate(route.name, route.params),
-                                target: state.key,
+        <PaperProvider>
+            <Tab.Navigator
+                id="(tabs)"
+                initialRouteName="Vendas"
+                screenOptions={{
+                    headerShown: false,
+                    tabBarActiveTintColor: 'white',
+                    tabBarInactiveTintColor: 'gray',
+                }}
+                tabBar={({ navigation, state, descriptors, insets }) => (
+                    <BottomNavigation.Bar
+                        navigationState={state}
+                        safeAreaInsets={insets}
+                        style={styles.bot_tab}  // Define o estilo da barra de navegação inferior aqui
+                        onTabPress={({ route, preventDefault }) => {
+                            const event = navigation.emit({
+                                type: 'tabPress',
+                                target: route.key,
+                                canPreventDefault: true,
                             });
-                        }
-                    }}
-                    renderIcon={({ route, focused, color }) => {
-                        const { options } = descriptors[route.key];
-                        if (options.tabBarIcon) {
-                            return options.tabBarIcon({ focused, color, size: 24 });
-                        }
 
-                        return null;
-                    }}
-                    getLabelText={({ route }) => {
-                        const { options } = descriptors[route.key];
-                        const label =
-                            options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.key;
+                            if (event.defaultPrevented) {
+                                preventDefault();
+                            } else {
+                                navigation.dispatch({
+                                    ...CommonActions.navigate(route.name, route.params),
+                                    target: state.key,
+                                });
+                            }
+                        }}
+                        renderIcon={({ route, focused, color }) => {
+                            const { options } = descriptors[route.key];
+                            if (options.tabBarIcon) {
+                                return options.tabBarIcon({ focused, color, size: 24 });
+                            }
 
-                        return label.toString();
+                            return null;
+                        }}
+                        getLabelText={({ route }) => {
+                            const { options } = descriptors[route.key];
+                            const label =
+                                options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.key;
+
+                            return label.toString();
+                        }}
+                    />
+                )}
+            >
+                <Tab.Screen
+                    name="Vendas"
+                    component={VendasScreen}
+                    options={{
+                        tabBarLabel: 'Vendas',
+                        tabBarIcon: ({ color, size }) => {
+                            return <Icon name="cart" size={size} color={color} />;
+                        },
                     }}
                 />
-            )}
-        >
-            <Tab.Screen
-                name="Vendas"
-                component={VendasScreen}
-                options={{
-                    tabBarLabel: 'Vendas',
-                    tabBarIcon: ({ color, size }) => {
-                        return <Icon name="cart" size={size} color={color} />;
-                    },
-                }}
-            />
-            <Tab.Screen
-                name="Estoque"
-                component={EstoqueTabScreens}
-                options={{
-                    tabBarLabel: 'Estoque',
-                    tabBarIcon: ({ color, size }) => {
-                        return <Icon name="warehouse" size={size} color={color} />;
-                    },
-                }}
-            />
-            <Tab.Screen
-                name="Histórico"
-                component={HistoricoScreen}
-                options={{
-                    tabBarLabel: 'Histórico',
-                    tabBarIcon: ({ color, size }) => {
-                        return <Icon name="history" size={size} color={color} />;
-                    },
-                }}
-            />
-        </Tab.Navigator>
+                <Tab.Screen
+                    name="Estoque"
+                    component={EstoqueTabScreens}
+                    options={{
+                        tabBarLabel: 'Estoque',
+                        tabBarIcon: ({ color, size }) => {
+                            return <Icon name="warehouse" size={size} color={color} />;
+                        },
+                    }}
+                />
+                <Tab.Screen
+                    name="Histórico"
+                    component={HistoricoScreen}
+                    options={{
+                        tabBarLabel: 'Histórico',
+                        tabBarIcon: ({ color, size }) => {
+                            return <Icon name="history" size={size} color={color} />;
+                        },
+                    }}
+                />
+            </Tab.Navigator>
+        </PaperProvider>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    bot_tab: {
+        backgroundColor: '#F6F6FF',  
     },
 });

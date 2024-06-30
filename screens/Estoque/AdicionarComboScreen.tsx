@@ -9,6 +9,7 @@ import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { Menu, Divider } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -100,53 +101,29 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
         }
     };
 
+    const customTextInputTheme = {
+        colors: {
+            primary: '#2E8EC2', 
+            text: 'black',  
+            background: 'white', 
+        },
+    };
+
     return (
         <PaperProvider theme={paperTheme}>
-            <View
-                style={{
-                    justifyContent: 'space-around',
-                }}
-            >
-                <View>
-                    <Appbar.Header mode="center-aligned" elevated>
-                        <Appbar.BackAction onPress={showDialog} />
-                        <Appbar.Content title="Adicionar combo" />
-                        {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
-                    </Appbar.Header>
-                </View>
-                {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+                <View style={{ justifyContent: 'space-around' }}>
+                    <View>
+                        <Appbar.Header mode="center-aligned" elevated style={styles.barCima}>
+                            <Appbar.BackAction onPress={showDialog} color='white'/>
+                            <Appbar.Content title="Adicionar combo" titleStyle={{color: 'white', fontFamily: 'Milky Nice'}}/>
+                        </Appbar.Header>
+                    </View>
 
-                <View>
-                    {/* <PaperProvider>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                paddingTop: 25,
-                                width: '80%',
-                            }}
-                        >
-                            <Menu
-                                visible={visibleMenu}
-                                onDismiss={closeMenu}
-                                anchor={
-                                    <Chip onPress={openMenu} style={{ width: '80%', justifyContent: 'center' }}>
-                                        Selecione o item aaaaaaaaaaa
-                                    </Chip>
-                                }
-                                style={{ width: '80%', justifyContent: 'center', marginTop: -25 }}
-                            >
-                                <Menu.Item onPress={() => {}} title="Item 1" />
-                                <Menu.Item onPress={() => {}} title="Item 2" />
-                                <Divider />
-                                <Menu.Item onPress={() => {}} title="Item 3" />
-                            </Menu>
-                        </View>
-                    </PaperProvider> */}
-
-                    <Text variant="titleLarge" style={{ margin: 20 }}>
-                        Para adicionar um Combo, os itens que irão compor o compb devem ser adicionados individualmente para aparecer na listagem.
-                    </Text>
+                    <View style={styles.infoBox}>
+                        <Text variant="titleLarge" style={styles.infoText}>
+                            Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente para aparecer na listagem.
+                        </Text>
+                    </View>
 
                     <View style={styles.formContainer}>
                         <View>
@@ -156,6 +133,7 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
                                 value={produtoNome}
                                 onChangeText={(text) => setProdutoNome(text)}
                                 style={styles.input}
+                                theme={customTextInputTheme}
                             />
                         </View>
 
@@ -168,13 +146,10 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
                                 borderRadius: 4,
                                 borderStyle: 'solid',
                                 backgroundColor: 'white',
-                                justifyContent: 'space-around',
-                                width: '100%',
                             }}
                             visible={showDropDown}
                             showDropDown={() => setShowDropDown(true)}
                             onDismiss={() => setShowDropDown(false)}
-                            //onBlur={() => setShowDropDown(false)} // Add this line
                             value={SelectDivision}
                             multiSelect={false}
                             setValue={setSelectDivision}
@@ -183,6 +158,7 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
                                 value: item.id,
                             }))}
                             inputProps={{
+                                style: { backgroundColor: 'white' },
                                 right: () => <Icon name="chevron-down" size={15} color={'black'} />,
                             }}
                         />
@@ -192,27 +168,26 @@ export default function AdicionarComboScreen({ navigation }: { navigation: any }
                             onChangeText={(text) => handlePrecoChange(text)}
                             keyboardType="numeric"
                             mode="outlined"
-                            style={{ marginTop: 10 }}
+                            style={{ marginTop: 15, backgroundColor: 'white' }}
+                            theme={customTextInputTheme}
                         />
                     </View>
 
                     <View>
                         <Portal>
-                            <Dialog visible={visible} onDismiss={hideDialog}>
-                                <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
+                            <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
+                                <Dialog.Title style={styles.dialog_t}>Deseja voltar para a tela de estoque?</Dialog.Title>
                                 <Dialog.Content>
-                                    <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                    <Text style={styles.dialog_t} variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
                                 </Dialog.Content>
                                 <Dialog.Actions>
-                                    <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
-                                    <Button onPress={hideDialog}>Cancelar</Button>
+                                    <Button onPress={() => handleButtonVoltar()} textColor="#EC7229">Sim, desejo voltar</Button>
+                                    <Button onPress={hideDialog} buttonColor="#2196F3" textColor="white">Cancelar</Button>
                                 </Dialog.Actions>
                             </Dialog>
                         </Portal>
                     </View>
                 </View>
-                {/* </ScrollView> */}
-            </View>
         </PaperProvider>
     );
 }
@@ -234,8 +209,6 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         alignItems: 'center',
-        // position: 'absolute',
-        // bottom: 0,
         width: '100%',
     },
     buttonAction: {
@@ -252,5 +225,35 @@ const styles = StyleSheet.create({
     },
     footerContainer: {
         alignItems: 'center',
+    },
+    barCima: {
+        backgroundColor: '#3DACE1',
+    },
+    dialog: {
+        backgroundColor: 'white',
+        borderRadius: 3,
+    },
+    dialog_t: {
+        color: 'black',
+    },
+    infoBox: {
+        marginTop: 25,
+        marginLeft: 20,
+        marginRight:20,
+        backgroundColor: '#F6F6FF',
+        padding: 10,
+        margin: 10,
+        borderRadius: 5,
+        borderWidth: 1.5,
+        borderColor: '#003D5C',
+        borderStyle: 'dashed',  // Borda tracejada
+        justifyContent: 'center', // Centraliza os filhos verticalmente
+        alignItems: 'center',
+    },
+    infoText: {
+        color: '#003D5C',
+        fontSize: 15,
+        textAlign: 'center',
+        fontFamily: 'FontParaTexto',
     },
 });
