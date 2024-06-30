@@ -5,10 +5,13 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 import VendasScreen from '@/screens/VendasScreen';
 import HistoricoScreen from '@/screens/HistoricoScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, PaperProvider } from 'react-native-paper';
+import { BottomNavigation, DefaultTheme, PaperProvider, Surface } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EstoqueTabScreens from '@/screens/Estoque/EstoqueScreens';
+import CustomTabBarLabel from '../../components/CustomTabBarLabel';
+
+
 
 export default function TabLayout() {
     const Tab = createBottomTabNavigator();
@@ -22,8 +25,11 @@ export default function TabLayout() {
             }}
             tabBar={({ navigation, state, descriptors, insets }) => (
                 <BottomNavigation.Bar
+                    style={styles.fundo}
                     navigationState={state}
                     safeAreaInsets={insets}
+                    activeColor='#003D5C'
+                    inactiveColor='#003D5C'
                     onTabPress={({ route, preventDefault }) => {
                         const event = navigation.emit({
                             type: 'tabPress',
@@ -48,12 +54,12 @@ export default function TabLayout() {
 
                         return null;
                     }}
-                    getLabelText={({ route }) => {
+                    renderLabel={({ route, focused, color }) => {
                         const { options } = descriptors[route.key];
                         const label =
                             options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.key;
 
-                        return label.toString();
+                        return <CustomTabBarLabel label={label.toString()} color={color} />;
                     }}
                 />
             )}
@@ -95,5 +101,8 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    fundo:{
+        backgroundColor: '#F6F6FF',
     },
 });
