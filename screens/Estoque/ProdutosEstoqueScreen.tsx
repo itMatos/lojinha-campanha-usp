@@ -12,7 +12,6 @@ const vh = Dimensions.get('window').height / 100;
 export default function ProdutosEstoqueScreen({ navigation, route }: { navigation: any; route: any }) {
     const { items }: { items: ProdutosType[] } = route.params;
     const [itens, setItens] = useState<ProdutosType[]>(items);
-    console.log('testando tela de produtos do estoque', items);
 
     const handleChangeQuantity = (itemId: string, newQuantity: number) => {
         setItens((prevItens) =>

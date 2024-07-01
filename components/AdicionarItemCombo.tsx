@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
-import { ProdutoIndividualType } from '@/types/types';
+import { ProdutoIndividualType, ProdutosType } from '@/types/types';
 
 const vw = Dimensions.get('window').width / 100;
 
@@ -11,13 +11,20 @@ export default function AdicionarItemCombo({
     onAddItem,
     onRemoveItem,
 }: {
-    itens: ProdutoIndividualType[];
+    itens: ProdutosType[];
     onAddItem: (itemId: string) => void;
     onRemoveItem: (itemId: string) => void;
 }) {
     const [showDropDown, setShowDropDown] = useState(false);
-    const [SelectDivision, setSelectDivision] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState('');
     const [quantidade, setQuantidade] = useState('1');
+
+    const filteredList = itens
+        .filter((item) => !item.eh_combo)
+        .map((item) => ({
+            label: item.nome,
+            value: item.id,
+        }));
 
     return (
         <View style={styles.formContainer}>
@@ -37,13 +44,10 @@ export default function AdicionarItemCombo({
                 showDropDown={() => setShowDropDown(true)}
                 onDismiss={() => setShowDropDown(false)}
                 //onBlur={() => setShowDropDown(false)} // Add this line
-                value={SelectDivision}
+                value={selectedProduct}
                 multiSelect={false}
-                setValue={setSelectDivision}
-                list={itens.map((item) => ({
-                    label: item.nome,
-                    value: item.id,
-                }))}
+                setValue={setSelectedProduct}
+                list={filteredList}
                 inputProps={{
                     right: <TextInput.Icon icon="chevron-down" />, // Assuming this is a valid icon name
                 }}

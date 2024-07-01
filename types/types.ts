@@ -6,6 +6,7 @@ export type ProdutoIndividualType = {
     eh_combo: false;
     combo_products?: [];
     quantidade_estoque: number;
+    key_img?: string;
 };
 
 export type ProdutoComboType = {
@@ -15,7 +16,7 @@ export type ProdutoComboType = {
     preco: number;
     eh_combo: true;
     combo_products: ItemComboType[];
-    quantidade_estoque: number;
+    key_img?: string;
 };
 
 export type ItemComboType = {
