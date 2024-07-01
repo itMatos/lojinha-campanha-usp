@@ -4,6 +4,9 @@ import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import { ProdutoIndividualType, ProdutosType } from '@/types/types';
 
+import { useEffect } from 'react';
+import { getAllProducts } from '@/services/CampanhaApi';
+
 const vw = Dimensions.get('window').width / 100;
 
 export default function AdicionarItemCombo({
@@ -15,6 +18,23 @@ export default function AdicionarItemCombo({
     onAddItem: (itemId: string) => void;
     onRemoveItem: (itemId: string) => void;
 }) {
+    console.log("RECEBI ITENS AQUI", itens);
+
+    // const [items, setItems] = useState<ProdutosType[]>([]);
+
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             const products = await getAllProducts();
+    //             setItems(products);
+    //         } catch (error) {
+    //             console.error('Erro ao buscar produtos:', error);
+    //         }
+    //     };
+
+    //     fetchProducts();
+    // }, []);
+
     const [showDropDown, setShowDropDown] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState('');
     const [quantidade, setQuantidade] = useState('1');
@@ -23,11 +43,21 @@ export default function AdicionarItemCombo({
         .filter((item) => !item.eh_combo)
         .map((item) => ({
             label: item.nome,
-            value: item.id,
+            value: item.nome,
         }));
 
+    filteredList.forEach((item) => {
+        console.log("item: ", item.label, item.value);
+    });
+
+    const handleSelectedValue = (value : string) => {
+        setSelectedProduct(value);
+        onAddItem(value);
+        setShowDropDown(false);
+    }
+
     return (
-        <View style={styles.formContainer}>
+        <View style={styles.formContainer}> 
             <DropDown
                 label={'Selecione o produto'}
                 mode={'outlined'}
@@ -46,12 +76,13 @@ export default function AdicionarItemCombo({
                 //onBlur={() => setShowDropDown(false)} // Add this line
                 value={selectedProduct}
                 multiSelect={false}
-                setValue={setSelectedProduct}
+                // setValue={setSelectedProduct}       
+                setValue={handleSelectedValue}
                 list={filteredList}
                 inputProps={{
                     right: <TextInput.Icon icon="chevron-down" />, // Assuming this is a valid icon name
                 }}
-            />
+                />
             <TextInput
                 label="Quantidade"
                 value={quantidade}
