@@ -25,3 +25,14 @@ export type ItemComboType = {
 };
 
 export type ProdutosType = ProdutoIndividualType | ProdutoComboType;
+
+export type ProdutoVendaType = {
+    nome: string,
+    preco: number,
+    quantidade: number
+}
+
+export type SaleType = {
+    preco_total: number;
+    produtos: ProdutoVendaType[];
+};

@@ -11,6 +11,7 @@ import DropDown from 'react-native-paper-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AdicionarItemCombo from '@/components/AdicionarItemCombo';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
+import { getAllProducts } from '@/services/CampanhaApi';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
