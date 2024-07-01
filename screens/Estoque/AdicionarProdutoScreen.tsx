@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Dimensions, useColorScheme } from 'react-native';
 import { Appbar, Button, Dialog, PaperProvider, Portal, Text, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,6 +7,8 @@ import { ScrollView } from 'react-native';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -19,10 +21,7 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [visible, setVisible] = useState(false);
     const [quantidadeProduto, setQuantidadeProduto] = useState('0');
-
-    const [itens, setItens] = useState<ProdutosType[]>(items);
-
-    console.log('isso vem de params', items);
+    const [displayImg, setDisplayImg] = useState<any>(null);
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -51,11 +50,9 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
             preco: parseFloat(produtoPreco.replace(',', '.')),
             eh_combo: false,
             quantidade_estoque: parseInt(quantidadeProduto),
+            key_img: displayImg,
         };
-        console.log('Novo produto:', novoProduto);
         const newItems = [...items, novoProduto];
-        setItens(newItems);
-        console.log('Novos itens:', newItems);
 
         navigation.navigate({
             name: 'ProdutosEstoque',
@@ -79,10 +76,20 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
 
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
+            AsyncStorage.setItem('img', result.assets[0].uri);
+            setDisplayImg(result.assets[0].uri);
         } else {
             alert('You did not select any image.');
         }
     };
+
+    useEffect(() => {
+        AsyncStorage.getItem('img').then((r) => {
+            if (r) {
+                setDisplayImg(r);
+            }
+        });
+    }, []);
 
     return (
         <>
@@ -130,7 +137,7 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                             <View style={styles.container}>
                                 <Button onPress={pickImageAsync}>Choose a photo</Button>
                                 <View style={styles.imageContainer}>
-                                    <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
+                                    {displayImg && <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />}
                                 </View>
                             </View>
                         </View>
@@ -206,3 +213,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
+function launchImageLibrary(arg0: { mediaType: string }) {
+    throw new Error('Function not implemented.');
+}
