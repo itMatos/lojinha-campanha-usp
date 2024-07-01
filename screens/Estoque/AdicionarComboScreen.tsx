@@ -173,6 +173,14 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
         ]);
     };
 
+    const customTextInputTheme = {
+        colors: {
+            primary: '#2E8EC2', 
+            text: 'black',  
+            background: 'white', 
+        },
+    };
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <PaperProvider theme={paperTheme}>
@@ -182,18 +190,20 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                     }}
                 >
                     <View>
-                        <Appbar.Header mode="center-aligned" elevated>
-                            <Appbar.BackAction onPress={showDialog} />
-                            <Appbar.Content title="Adicionar combo" />
+                        <Appbar.Header mode="center-aligned" elevated style={styles.barCima}>
+                            <Appbar.BackAction onPress={showDialog} color='white'/>
+                            <Appbar.Content title="Adicionar combo" titleStyle={{color: 'white', fontFamily: 'Milky Nice'}}/>
                             {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
                         </Appbar.Header>
                     </View>
 
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View>
-                            <Text variant="titleLarge" style={{ margin: 20 }}>
-                                Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente.
-                            </Text>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View>
+                        <View style={styles.infoBox}>
+                            <Text variant="titleLarge" style={styles.infoText}>
+                        Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente.
+                        </Text>
+                    </View>
 
                             <View style={styles.formContainer}>
                                 <View>
@@ -203,6 +213,7 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                                         value={comboNome}
                                         onChangeText={(text) => setComboNome(text)}
                                         style={styles.input}
+                                        theme={customTextInputTheme}
                                     />
                                     <TextInput
                                         mode="outlined"
@@ -211,38 +222,39 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                                         onChangeText={(text) => handlePrecoChange(text)}
                                         keyboardType="numeric"
                                         style={styles.input}
+                                        theme={customTextInputTheme}
                                     />
                                 </View>
 
                                 {formCombo.map((item, index) => (
                                     <View key={index}>
                                         {item}
-                                        <Divider />
+                                        <Divider style={{ backgroundColor: '#B0B0B0' }} />
                                     </View>
                                 ))}
 
-                                <Divider />
-                                <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
-                                    Adicionar outro produto
-                                </Button>
-                            </View>
+                            <Divider style={{ backgroundColor: '#B0B0B0' }}/>
+                            <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
+                                Adicionar outro produto
+                            </Button>
+                        </View>
 
                             <View>
-                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{ margin: 20 }}>
+                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{marginLeft:95, marginRight:95}} textColor='white' buttonColor='#2196F3'>
                                     Salvar combo
                                 </Button>
                             </View>
 
                             <View>
                                 <Portal>
-                                    <Dialog visible={visible} onDismiss={hideDialog}>
-                                        <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
+                                    <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
+                                        <Dialog.Title style={styles.dialog_t}>Deseja voltar para a tela de estoque?</Dialog.Title>
                                         <Dialog.Content>
-                                            <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                            <Text style={styles.dialog_t} variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
                                         </Dialog.Content>
                                         <Dialog.Actions>
-                                            <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
-                                            <Button onPress={hideDialog}>Cancelar</Button>
+                                            <Button onPress={() => handleButtonVoltar()} textColor="#EC7229">Sim, desejo voltar</Button>
+                                            <Button onPress={hideDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5}}>Cancelar</Button>
                                         </Dialog.Actions>
                                     </Dialog>
                                 </Portal>
@@ -264,6 +276,8 @@ const styles = StyleSheet.create({
     },
     input: {
         marginBottom: 15,
+        marginLeft: 20,
+        marginRight: 20,
         backgroundColor: 'white',
     },
     appBar: {
@@ -290,5 +304,35 @@ const styles = StyleSheet.create({
     },
     footerContainer: {
         alignItems: 'center',
+    },
+    barCima: {
+        backgroundColor: '#3DACE1',
+    },
+    dialog: {
+        backgroundColor: 'white',
+        borderRadius: 3,
+    },
+    dialog_t: {
+        color: 'black',
+    },
+    infoBox: {
+        marginTop: 25,
+        marginLeft: 20,
+        marginRight:20,
+        backgroundColor: '#F6F6FF',
+        padding: 10,
+        margin: 10,
+        borderRadius: 5,
+        borderWidth: 1.5,
+        borderColor: '#003D5C',
+        borderStyle: 'dashed',  // Borda tracejada
+        justifyContent: 'center', // Centraliza os filhos verticalmente
+        alignItems: 'center',
+    },
+    infoText: {
+        color: '#003D5C',
+        fontSize: 15,
+        textAlign: 'center',
+        fontFamily: 'FontParaTexto',
     },
 });

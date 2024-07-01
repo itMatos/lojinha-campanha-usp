@@ -104,12 +104,20 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
         });
     }, []);
 
+    const customTextInputTheme = {
+        colors: {
+            primary: '#2E8EC2',  // Cor azul quando focado
+            text: 'black',    // Cor do texto cinza
+            background: 'white', // Cor de fundo
+        },
+    };
+
     return (
         <>
             <PaperProvider theme={paperTheme}>
-                <Appbar.Header mode="center-aligned" elevated>
-                    <Appbar.BackAction onPress={showDialog} />
-                    <Appbar.Content title="Adicionar produto" />
+                <Appbar.Header mode="center-aligned" elevated style={styles.barCima}>
+                    <Appbar.BackAction onPress={showDialog} color='white'/>
+                    <Appbar.Content title="Adicionar produto" titleStyle={{color: 'white', fontFamily: 'Milky Nice'}}/>
                     {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
                 </Appbar.Header>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -120,35 +128,39 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                                     label="Nome"
                                     value={produtoNome}
                                     onChangeText={(text) => setProdutoNome(text)}
-                                    style={{ margin: 10 }}
+                                    style={{ margin: 10, backgroundColor: 'white' }}
                                     mode="outlined"
+                                    theme={customTextInputTheme}
                                 />
                                 <TextInput
                                     label="Descrição"
                                     value={produtoDescricao}
                                     onChangeText={(text) => setProdutoDescricao(text)}
-                                    style={{ margin: 10 }}
+                                    style={{ margin: 10,backgroundColor: 'white' }}
                                     mode="outlined"
+                                    theme={customTextInputTheme}
                                 />
                                 <TextInput
                                     label="Preço"
                                     value={produtoPreco}
                                     onChangeText={(text) => handlePrecoChange(text)}
                                     keyboardType="numeric"
-                                    style={{ margin: 10 }}
+                                    style={{ margin: 10,backgroundColor: 'white' }}
                                     mode="outlined"
+                                    theme={customTextInputTheme}
                                 />
                                 <TextInput
                                     label="Quantidade em estoque"
                                     value={quantidadeProduto}
                                     onChangeText={(text) => setQuantidadeProduto(text)}
                                     keyboardType="numeric"
-                                    style={{ margin: 10 }}
+                                    style={{ margin: 10,backgroundColor: 'white' }}
                                     mode="outlined"
+                                    theme={customTextInputTheme}
                                 />
                             </View>
                             <View style={styles.container}>
-                                <Button onPress={pickImageAsync}>Choose a photo</Button>
+                                <Button onPress={pickImageAsync} textColor='white' buttonColor='#2196F3' style={{ marginLeft:120, marginRight: 120, marginBottom: 10, }}>Choose a photo</Button>
                                 <View style={styles.imageContainer}>
                                     {displayImg && <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />}
                                 </View>
@@ -156,12 +168,12 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                         </View>
                         <View style={styles.buttonsContainer}>
                             <View style={styles.buttonAction}>
-                                <Button mode="contained" onPress={handleAdicionarProdutoIndividual}>
+                                <Button mode="contained" onPress={handleAdicionarProdutoIndividual} buttonColor='#2196F3' textColor='white' style={{marginLeft:20, marginRight:20}}>
                                     Adicionar
                                 </Button>
                             </View>
                             <View style={styles.buttonAction}>
-                                <Button mode="outlined" onPress={showDialog}>
+                                <Button mode="outlined" onPress={showDialog} textColor='#2196F3' style={{ borderColor: '#2196F3',marginLeft:20, marginRight:20}}>
                                     Voltar
                                 </Button>
                             </View>
@@ -169,14 +181,14 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
 
                         <View>
                             <Portal>
-                                <Dialog visible={visible} onDismiss={hideDialog}>
-                                    <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
+                                <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
+                                    <Dialog.Title style={styles.dialog_t}>Deseja voltar para a tela de estoque?</Dialog.Title>
                                     <Dialog.Content>
-                                        <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                        <Text style={styles.dialog_t} variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
                                     </Dialog.Content>
                                     <Dialog.Actions>
-                                        <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
-                                        <Button onPress={hideDialog}>Cancelar</Button>
+                                        <Button onPress={() => handleButtonVoltar()} textColor="#EC7229">Sim, desejo voltar</Button>
+                                        <Button onPress={hideDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5}}>Cancelar</Button>
                                     </Dialog.Actions>
                                 </Dialog>
                             </Portal>
@@ -190,7 +202,6 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         width: '100%',
     },
     formContainer: {
@@ -206,8 +217,6 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         alignItems: 'center',
-        // position: 'absolute',
-        // bottom: 0,
         width: '100%',
     },
     buttonAction: {
@@ -217,13 +226,25 @@ const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 2,
         marginBottom: 16,
+        marginTop: 10,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
         elevation: 5,
+        marginHorizontal: 20,
     },
     footerContainer: {
         alignItems: 'center',
+    },
+    barCima: {
+        backgroundColor: '#3DACE1'
+    },
+    dialog: {
+        backgroundColor: 'white',
+        borderRadius: 3,
+    },
+    dialog_t: {
+        color: 'black',
     },
 });
 function launchImageLibrary(arg0: { mediaType: string }) {

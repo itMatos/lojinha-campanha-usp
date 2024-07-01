@@ -56,6 +56,14 @@ export default function AdicionarItemCombo({
         setShowDropDown(false);
     }
 
+    const customTextInputTheme = {
+        colors: {
+            primary: '#2E8EC2', 
+            text: 'black',  
+             background: 'white', 
+        },
+    };
+
     return (
         <View style={styles.formContainer}> 
             <DropDown
@@ -80,6 +88,7 @@ export default function AdicionarItemCombo({
                 setValue={handleSelectedValue}
                 list={filteredList}
                 inputProps={{
+                    style: { backgroundColor: 'white' },
                     right: <TextInput.Icon icon="chevron-down" />, // Assuming this is a valid icon name
                 }}
                 />
@@ -90,6 +99,7 @@ export default function AdicionarItemCombo({
                 keyboardType="numeric"
                 mode="outlined"
                 style={{ marginTop: 10 }}
+                theme={customTextInputTheme}
             />
         </View>
     );
@@ -104,6 +114,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginBottom: 15,
+        
         backgroundColor: 'white',
     },
     appBar: {

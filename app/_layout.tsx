@@ -14,7 +14,7 @@ export default function RootLayout() {
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
     const [loaded] = useFonts({
-        SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+        FontParaTexto: require('../assets/fonts/Comfortaa-Bold.ttf'),
     });
 
     const paperTheme = colorScheme !== 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light };
