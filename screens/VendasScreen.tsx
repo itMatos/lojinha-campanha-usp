@@ -1,12 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Dimensions, StatusBar } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import { StatusBar } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import CardItemVenda from '@/components/CardItemVenda';
-import { ScrollView } from 'react-native';
-import { Dimensions } from 'react-native';
 
 const vh = Dimensions.get('window').height / 100;
 
@@ -27,19 +25,19 @@ export default function VendasScreen() {
         {
             id: 1,
             produto: { id: 1, nome: 'Chaveiro', descricao: '1 chaveiro pequeno', preco: 5.0 },
-            quantidade: 1,
+            quantidade: 0,
             valorTotal: 5.0,
         },
         {
             id: 2,
             produto: { id: 2, nome: 'Borracha', descricao: '1 borracha pequena', preco: 2.0 },
-            quantidade: 1,
+            quantidade: 0,
             valorTotal: 2.0,
         },
         {
             id: 3,
             produto: { id: 3, nome: 'Caneta', descricao: '1 caneta azul', preco: 1.0 },
-            quantidade: 1,
+            quantidade: 0,
             valorTotal: 1.0,
         },
     ]);
@@ -51,13 +49,16 @@ export default function VendasScreen() {
     };
 
     return (
-        <View style={{ flex: 1 }}>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <LinearGradient colors={['#2E8EC2', '#233E5D']} style={styles.fundo}>
+            <StatusBar barStyle="dark-content"/>
 
-            <Appbar.Header mode="center-aligned" elevated>
+            <Appbar.Header mode="center-aligned" elevated style={{backgroundColor: '#3DACE1'}}>
+                <View style={styles.logoContainer}>
+                    <Image source={require('../assets/images/logo.png')} style={styles.logo} resizeMode="contain"/>
+                </View>
                 {/* <Appbar.BackAction onPress={() => {}} /> */}
-                <Appbar.Content title="Vendas" />
-                <Appbar.Action icon="magnify" onPress={() => {}} />
+                <Appbar.Content title="Vendas" color="#F6F6FF" titleStyle={styles.titulo}/>
+                <Appbar.Action icon="magnify" onPress={() => {}} color="#F6F6FF"/>
             </Appbar.Header>
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -69,7 +70,7 @@ export default function VendasScreen() {
                     ))}
                 </View>
             </ScrollView>
-        </View>
+        </LinearGradient>
     );
 }
 
@@ -80,5 +81,21 @@ const styles = StyleSheet.create({
     },
     listVendas: {
         paddingBottom: 10 * vh,
+    },
+    fundo:{
+        flex: 1,
+        backgroundColor: "black",
+    },
+    titulo:{
+        fontFamily: 'Milky Nice',
+    },
+    logoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 12,
+    },
+    logo: {
+        width: 40,
+        height: 40,
     },
 });
