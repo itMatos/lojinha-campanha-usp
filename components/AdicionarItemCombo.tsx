@@ -16,7 +16,7 @@ export default function AdicionarItemCombo({
     onRemoveItem: (itemId: string) => void;
 }) {
     const [showDropDown, setShowDropDown] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState('teste');
     const [quantidade, setQuantidade] = useState('1');
 
     const filteredList = itens
@@ -26,8 +26,15 @@ export default function AdicionarItemCombo({
             value: item.id,
         }));
 
+    const teste = (value : string) => {
+        console.log(value);
+        setSelectedProduct(value);
+        setShowDropDown(false); // Fechar o dropdown após a seleção
+        console.log("teste2 ", value);
+    }
+
     return (
-        <View style={styles.formContainer}>
+        <View style={styles.formContainer}> 
             <DropDown
                 label={'Selecione o produto'}
                 mode={'outlined'}
@@ -46,12 +53,13 @@ export default function AdicionarItemCombo({
                 //onBlur={() => setShowDropDown(false)} // Add this line
                 value={selectedProduct}
                 multiSelect={false}
-                setValue={setSelectedProduct}
+                // setValue={setSelectedProduct}       
+                setValue={teste}
                 list={filteredList}
                 inputProps={{
                     right: <TextInput.Icon icon="chevron-down" />, // Assuming this is a valid icon name
                 }}
-            />
+                />
             <TextInput
                 label="Quantidade"
                 value={quantidade}

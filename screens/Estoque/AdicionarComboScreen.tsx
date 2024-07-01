@@ -11,7 +11,7 @@ import DropDown from 'react-native-paper-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AdicionarItemCombo from '@/components/AdicionarItemCombo';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
-import { getAllProducts } from '@/services/CampanhaApi';
+import { getAllProducts, postNewProduct } from '@/services/CampanhaApi';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -58,7 +58,21 @@ const listaDeProdutos = [
 ];
 
 export default function AdicionarComboScreen({ navigation, route }: { navigation: any; route: any }) {
-    const { items }: { items: ProdutosType[] } = route.params;
+    const [items, setItems] = useState<ProdutosType[]>([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const products = await getAllProducts();
+                setItems(products);
+            } catch (error) {
+                console.error('Erro ao buscar produtos:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
     const [produtos, setProdutos] = useState<ProdutosType[]>(items);
     const [comboNome, setComboNome] = useState('');
     const [comboDescricao, setComboDescricao] = useState('');
@@ -109,18 +123,25 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
         setItensDoCombo((prevItens) => prevItens.filter((item) => item.id !== itemId));
     };
 
-    const handleAdicionarProdutoCombo = () => {
+    const handleAdicionarProdutoCombo = async () => {
         const testeId = (Math.random() * (8000 - 1000) + 1000).toString();
         const novoProduto: ProdutoComboType = {
             id: testeId,
             nome: comboNome,
             descricao: comboDescricao,
+            quantidade_estoque: 0,
             preco: parseFloat(comboPreco.replace(',', '.')),
             eh_combo: true,
             combo_products: itensDoCombo,
         };
-        const newItems = [...produtos, novoProduto];
-        setProdutos(newItems);
+        
+        try {
+            const produtoAdicionado = await postNewProduct(novoProduto);
+            console.log("Produto adicionado com sucesso! --> ", produtoAdicionado);
+    
+            // Atualizar a lista de itens após a adição bem-sucedida
+            const newItems = [...items, novoProduto];
+            setProdutos(newItems);
 
         navigation.navigate({
             name: 'ProdutosEstoque',
@@ -129,96 +150,102 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
             },
             merge: true,
         });
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+    }
     };
 
     const [formCombo, setFormCombo] = useState([
-        <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+        <AdicionarItemCombo itens={items} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
     ]);
 
     const AdicionarFormCombo = () => {
         setFormCombo([
             ...formCombo,
-            <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+            <AdicionarItemCombo itens={items} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
         ]);
     };
 
     return (
-        <PaperProvider theme={paperTheme}>
-            <View
-                style={{
-                    justifyContent: 'space-around',
-                }}
-            >
-                <View>
-                    <Appbar.Header mode="center-aligned" elevated>
-                        <Appbar.BackAction onPress={showDialog} />
-                        <Appbar.Content title="Adicionar combo" />
-                        {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
-                    </Appbar.Header>
-                </View>
-
-                <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={styles.container}>
+            <PaperProvider theme={paperTheme}>
+                <View
+                    style={{
+                        justifyContent: 'space-around',
+                    }}
+                >
                     <View>
-                        <Text variant="titleLarge" style={{ margin: 20 }}>
-                            Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente.
-                        </Text>
+                        <Appbar.Header mode="center-aligned" elevated>
+                            <Appbar.BackAction onPress={showDialog} />
+                            <Appbar.Content title="Adicionar combo" />
+                            {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
+                        </Appbar.Header>
+                    </View>
 
-                        <View style={styles.formContainer}>
-                            <View>
-                                <TextInput
-                                    mode="outlined"
-                                    label="Nome do combo"
-                                    value={comboNome}
-                                    onChangeText={(text) => setComboNome(text)}
-                                    style={styles.input}
-                                />
-                                <TextInput
-                                    mode="outlined"
-                                    label="Preço"
-                                    value={comboPreco}
-                                    onChangeText={(text) => handlePrecoChange(text)}
-                                    keyboardType="numeric"
-                                    style={styles.input}
-                                />
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View>
+                            <Text variant="titleLarge" style={{ margin: 20 }}>
+                                Para adicionar um Combo, os itens que irão compor o combo devem ser adicionados individualmente.
+                            </Text>
+
+                            <View style={styles.formContainer}>
+                                <View>
+                                    <TextInput
+                                        mode="outlined"
+                                        label="Nome do combo"
+                                        value={comboNome}
+                                        onChangeText={(text) => setComboNome(text)}
+                                        style={styles.input}
+                                    />
+                                    <TextInput
+                                        mode="outlined"
+                                        label="Preço"
+                                        value={comboPreco}
+                                        onChangeText={(text) => handlePrecoChange(text)}
+                                        keyboardType="numeric"
+                                        style={styles.input}
+                                    />
+                                </View>
+
+                                {formCombo.map((item, index) => (
+                                    <View key={index}>
+                                        {item}
+                                        <Divider />
+                                    </View>
+                                ))}
+
+                                <Divider />
+                                <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
+                                    Adicionar outro produto
+                                </Button>
                             </View>
 
-                            {formCombo.map((item, index) => (
-                                <View key={index}>
-                                    {item}
-                                    <Divider />
-                                </View>
-                            ))}
+                            <View>
+                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{ margin: 20 }}>
+                                    Salvar combo
+                                </Button>
+                            </View>
 
-                            <Divider />
-                            <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
-                                Adicionar outro produto
-                            </Button>
+                            <View>
+                                <Portal>
+                                    <Dialog visible={visible} onDismiss={hideDialog}>
+                                        <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
+                                        <Dialog.Content>
+                                            <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                        </Dialog.Content>
+                                        <Dialog.Actions>
+                                            <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
+                                            <Button onPress={hideDialog}>Cancelar</Button>
+                                        </Dialog.Actions>
+                                    </Dialog>
+                                </Portal>
+                            </View>
                         </View>
-
-                        <View>
-                            <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{ margin: 20 }}>
-                                Salvar combo
-                            </Button>
-                        </View>
-
-                        <View>
-                            <Portal>
-                                <Dialog visible={visible} onDismiss={hideDialog}>
-                                    <Dialog.Title>Deseja voltar para a tela de estoque?</Dialog.Title>
-                                    <Dialog.Content>
-                                        <Text variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
-                                    </Dialog.Content>
-                                    <Dialog.Actions>
-                                        <Button onPress={() => handleButtonVoltar()}>Sim, desejo voltar</Button>
-                                        <Button onPress={hideDialog}>Cancelar</Button>
-                                    </Dialog.Actions>
-                                </Dialog>
-                            </Portal>
-                        </View>
-                    </View>
-                </ScrollView>
-            </View>
-        </PaperProvider>
+                    </ScrollView>
+                </View>
+            </PaperProvider>
+        </ScrollView>
     );
 }
 
