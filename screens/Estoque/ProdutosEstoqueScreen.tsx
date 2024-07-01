@@ -27,7 +27,6 @@ export default function ProdutosEstoqueScreen({ navigation, route }: { navigatio
 
     console.warn(items);
     const [itens, setItens] = useState<ProdutosType[]>(items);
-    console.log('testando tela de produtos do estoque', items);
 
     const handleChangeQuantity = (itemId: string, newQuantity: number) => {
         setItens((prevItens) =>
