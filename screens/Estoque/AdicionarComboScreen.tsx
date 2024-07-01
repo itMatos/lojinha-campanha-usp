@@ -58,22 +58,29 @@ const listaDeProdutos = [
 ];
 
 export default function AdicionarComboScreen({ navigation, route }: { navigation: any; route: any }) {
-    const [items, setItems] = useState<ProdutosType[]>([]);
+    const { items }: { items: ProdutosType[] } = route.params;
+    // const [items, setItems] = useState<ProdutosType[]>([]);
+
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             const products = await getAllProducts();
+    //             setItems(products);
+    //         } catch (error) {
+    //             console.error('Erro ao buscar produtos:', error);
+    //         }
+    //     };
+
+    //     fetchProducts();
+    // }, []);
+
+    console.log("ITEMS AQUI!! ", items);
+    const [produtos, setProdutos] = useState<ProdutosType[]>(items);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const products = await getAllProducts();
-                setItems(products);
-            } catch (error) {
-                console.error('Erro ao buscar produtos:', error);
-            }
-        };
+        setProdutos(items);
+    }, [items]);
 
-        fetchProducts();
-    }, []);
-
-    const [produtos, setProdutos] = useState<ProdutosType[]>(items);
     const [comboNome, setComboNome] = useState('');
     const [comboDescricao, setComboDescricao] = useState('');
     const [comboPreco, setComboPreco] = useState('0');
@@ -115,8 +122,9 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     const [SelectDivision, setSelectDivision] = useState('');
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
 
-    const handleAdicionarItemCombo = (itemId: string) => {
-        setItensDoCombo((prevItens) => [...prevItens, { id: itemId, quantidade: 1 } as ItemComboType]);
+    const handleAdicionarItemCombo = (nome: string) => {
+        console.log("HANDLE ADICIONAR ITEM COMBO ", nome);
+        setItensDoCombo((prevItens) => [...prevItens, { nome: nome, quantidade: 1 } as ItemComboType]);
     };
 
     const handleRemoverItemCombo = (itemId: string) => {
@@ -134,6 +142,8 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
             eh_combo: true,
             combo_products: itensDoCombo,
         };
+
+        console.log("NOVO PRODUTO!! ", novoProduto);
         
         try {
             const produtoAdicionado = await postNewProduct(novoProduto);
@@ -144,11 +154,7 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
             setProdutos(newItems);
 
         navigation.navigate({
-            name: 'ProdutosEstoque',
-            params: {
-                items: newItems,
-            },
-            merge: true,
+            name: 'ProdutosEstoque'
         });
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
@@ -157,13 +163,13 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     };
 
     const [formCombo, setFormCombo] = useState([
-        <AdicionarItemCombo itens={items} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+        <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
     ]);
 
     const AdicionarFormCombo = () => {
         setFormCombo([
             ...formCombo,
-            <AdicionarItemCombo itens={items} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+            <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
         ]);
     };
 
