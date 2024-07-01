@@ -8,10 +8,26 @@ import { Dimensions } from 'react-native';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { getAllProducts } from '@/services/CampanhaApi';
 const vh = Dimensions.get('window').height / 100;
 
 export default function ProdutosEstoqueScreen({ navigation, route }: { navigation: any; route: any }) {
-    const { items }: { items: ProdutosType[] } = route.params;
+    const [items, setItems] = useState<ProdutosType[]>([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const products = await getAllProducts();
+                setItems(products);
+            } catch (error) {
+                console.error('Erro ao buscar produtos:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    console.warn(items);
     const [itens, setItens] = useState<ProdutosType[]>(items);
 
     const handleChangeQuantity = (itemId: string, newQuantity: number) => {

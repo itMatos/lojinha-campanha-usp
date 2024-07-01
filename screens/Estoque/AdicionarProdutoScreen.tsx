@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
+import { postNewProduct } from '@/services/CampanhaApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
@@ -40,8 +41,8 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
         result ? setProdutoPreco(result) : setProdutoPreco('0,00');
     };
 
-    const handleAdicionarProdutoIndividual = () => {
-        // adicionar endpoint para adicionar produto
+    const handleAdicionarProdutoIndividual = async () => {
+        // Gerar um ID de teste para o novo produto
         const testeId = (Math.random() * (8000 - 1000) + 1000).toString();
         const novoProduto: ProdutoIndividualType = {
             id: testeId,
@@ -52,15 +53,27 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
             quantidade_estoque: parseInt(quantidadeProduto),
             key_img: displayImg,
         };
-        const newItems = [...items, novoProduto];
+    
+        console.log('Novo produto:', novoProduto);
+    
+        try {
+            const produtoAdicionado = await postNewProduct(novoProduto);
+            console.log("Produto adicionado com sucesso! --> ", produtoAdicionado);
+    
+            // Atualizar a lista de itens após a adição bem-sucedida
+            const newItems = [...items, novoProduto];
 
-        navigation.navigate({
-            name: 'ProdutosEstoque',
-            params: {
-                items: newItems,
-            },
-            merge: true,
-        });
+            navigation.navigate({
+                name: 'ProdutosEstoque',
+                params: {
+                    items: newItems,
+                },
+                merge: true,
+            });
+        } catch (error) {
+            console.error('Erro ao adicionar produto:', error);
+            // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+        }
     };
 
     const handleButtonVoltar = () => {
