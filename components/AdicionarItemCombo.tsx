@@ -88,7 +88,7 @@ export default function AdicionarItemCombo({
                 style={{ marginTop: 10 }}
                 theme={customTextInputTheme}
             />
-            <Button icon="trash-can" mode="contained-tonal" style={styles.buttonQuantidade} onPress={() => onRemoveItem(selectedProduct)}>
+            <Button icon="trash-can" mode="contained-tonal" textColor='#2196F3' style={{ borderColor: '#2196F3',marginLeft:90, marginRight:90, backgroundColor: 'transperant', borderWidth:1, marginTop: 10}} onPress={() => onRemoveItem(selectedProduct)}>
                 Remover
             </Button>
         </View>

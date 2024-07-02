@@ -211,13 +211,13 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                                 ))}
 
                             <Divider style={{ backgroundColor: '#B0B0B0' }}/>
-                            <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
+                            <Button mode="contained" onPress={AdicionarFormCombo}  textColor='#2196F3' style={{ borderColor: '#2196F3', backgroundColor: 'transperant', borderWidth:1,  marginVertical: 20, marginHorizontal: 75}}>
                                 Adicionar outro produto
                             </Button>
                         </View>
 
                             <View>
-                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{marginLeft:95, marginRight:95}} textColor='white' buttonColor='#2196F3'>
+                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{marginLeft:95, marginRight:95, marginBottom: 10}} textColor='white' buttonColor='#2196F3'>
                                     Salvar combo
                                 </Button>
                             </View>
