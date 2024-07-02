@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const vh = Dimensions.get('window').height / 100;
 
@@ -50,23 +51,29 @@ export default function VendasScreen() {
     };
 
     return (
-        <View style={{ flex: 1 }}>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <LinearGradient colors={['#2E8EC2', '#233E5D']} style={styles.fundo}>
+            <View style={{ flex: 1 }}>
+                <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-            <Appbar.Header mode="center-aligned" elevated>
-                {/* <Appbar.BackAction onPress={() => {}} /> */}
-                <Appbar.Content title="Vendas" />
-                <Appbar.Action icon="magnify" onPress={() => {}} />
-            </Appbar.Header>
+                <Appbar.Header mode="center-aligned" elevated>
+                    <View style={styles.logoContainer}>
+                        <Image source={require('../assets/images/logo.png')} style={styles.logo} resizeMode="contain"/>
+                    </View>
+                    {/* <Appbar.BackAction onPress={() => {}} /> */}
+                    <Appbar.Content title="Vendas" color="#F6F6FF" titleStyle={styles.titulo}/>
+                    <Appbar.Action icon="magnify" onPress={() => {}} color="#F6F6FF"/>
+                </Appbar.Header>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.listVendas}>
-                    {itens.map((item) => (
-                        <View key={item.id}></View>
-                    ))}
-                </View>
-            </ScrollView>
-        </View>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.listVendas}>
+                        {itens.map((item) => (
+                            <View key={item.id}></View>
+                        ))}
+                    </View>
+                </ScrollView>
+            </View>
+        </LinearGradient>
+
     );
 }
 
@@ -77,5 +84,21 @@ const styles = StyleSheet.create({
     },
     listVendas: {
         paddingBottom: 10 * vh,
+    },
+    fundo:{
+        flex: 1,
+        backgroundColor: "black",
+    },
+    titulo:{
+        fontFamily: 'Milky Nice',
+    },
+    logoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 12,
+    },
+    logo: {
+        width: 40,
+        height: 40,
     },
 });

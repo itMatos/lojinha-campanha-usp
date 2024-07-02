@@ -15,15 +15,17 @@ export default function CardItemVenda({ produtoVenda, onAddToCart }: CardItemVen
             <Card elevation={1} style={styles.card}>
                 <Card.Cover source={{ uri: 'https://i.postimg.cc/7ZdzqFMv/undraw-dev-productivity-umsq.png' }} />
                 <Card.Content>
-                    <Text variant="titleLarge">{produtoVenda.nome}</Text>
-                    <Text variant="bodyMedium">{produtoVenda.descricao}</Text>
-                    <Text variant="bodyMedium">{produtoVenda.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                    <Text variant="titleLarge" style={styles.fonteTexto}>{produtoVenda.nome}</Text>
+                    <Text variant="bodyMedium" style={styles.fonteTexto}>{produtoVenda.descricao}</Text>
+                    <Text variant="bodyMedium" style={styles.fonteTexto}>{produtoVenda.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                 </Card.Content>
 
                 <Card.Actions>
                     <View>
                         <Button
                             mode="contained"
+                            buttonColor='#EC7229'
+                            labelStyle={styles.fonteButtom}
                             onPress={() => {
                                 onAddToCart(produtoVenda.nome);
                             }}
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
     card: {
         margin: 10,
         marginHorizontal: 40,
+        backgroundColor: "#f6f6ff",
     },
     chip: {
         flex: 1,
@@ -53,5 +56,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
+    },
+    fonteTexto: {
+        fontFamily: 'FontParaTexto',
+        color: '#003D5C'
+    },
+    fonteButtom: {
+        fontFamily: 'FontParaTexto',
+        color: '#f6f6ff'
     },
 });
