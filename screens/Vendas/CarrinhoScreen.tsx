@@ -74,6 +74,7 @@ export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProp
                             {cartItems.length > 0 && (
                                 <Button
                                     mode="outlined"
+                                    labelStyle={styles.fonteButton}
                                     onPress={() =>
                                         navigation.navigate({
                                             name: 'ProdutosVendasScreen',
@@ -82,7 +83,9 @@ export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProp
                                         })
                                     }
                                     style={{
-                                        margin: 10,
+                                        margin: 8,
+                                        borderColor: "#f6f6ff",
+                                        marginHorizontal:16
                                     }}
                                 >
                                     Esvaziar carrinho
@@ -113,8 +116,8 @@ export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProp
                                         padding: 10,
                                     }}
                                 >
-                                    <Text variant="titleLarge">Quantidade</Text>
-                                    <Text variant="titleLarge">{totalProducts}</Text>
+                                    <Text style={styles.fonteTexto} variant="titleLarge">Quantidade</Text>
+                                    <Text style={styles.fonteTexto} variant="titleLarge">{totalProducts}</Text>
                                 </View>
 
                                 <View
@@ -124,8 +127,8 @@ export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProp
                                         padding: 10,
                                     }}
                                 >
-                                    <Text variant="titleLarge">Total</Text>
-                                    <Text variant="titleLarge">
+                                    <Text style={styles.fonteTexto} variant="titleLarge">Total</Text>
+                                    <Text style={styles.fonteTexto} variant="titleLarge">
                                         {allCartItems
                                             .reduce((total, item) => total + item.preco * item.quantidade, 0)
                                             .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
@@ -143,6 +146,8 @@ export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProp
                                     <Button
                                         style={{ flex: 1 }}
                                         mode="contained"
+                                        buttonColor='#EC7229'
+                                        labelStyle={styles.fonteButton}
                                         onPress={() => {
                                             navigation.navigate({
                                                 name: 'PagamentoScreen',
@@ -178,6 +183,17 @@ const styles = StyleSheet.create({
     },
     textoVazio: {
         color: '#f6f6ff',
-        fontFamily: 'Comfortaa',
+        fontFamily: 'FontParaTexto',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 100
+    },
+    fonteTexto:{
+        fontFamily: 'FontParaTexto',
+        color: '#003D5C',
+    },
+    fonteButton: {
+        fontFamily: 'FontParaTexto',
+        color: '#f6f6ff',
     },
 });

@@ -47,9 +47,11 @@ export default function CardItemCarrinho({ produto, onUpdateUnid }: CardItemCarr
                 <Card.Actions>
                     <Button
                         mode="outlined"
+                        labelStyle={styles.fonteButton2}
                         onPress={() => {}}
                         style={{
                             margin: 5,
+                            borderColor: "#EC7229",
                         }}
                     >
                         Remover
@@ -59,7 +61,7 @@ export default function CardItemCarrinho({ produto, onUpdateUnid }: CardItemCarr
                         visible={showMenu}
                         onDismiss={() => setShowMenu(false)}
                         anchor={
-                            <Button mode="contained" onPress={() => setShowMenu(true)}>
+                            <Button buttonColor="#EC7229" mode="contained" onPress={() => setShowMenu(true)} labelStyle={styles.fonteButton}>
                                 {selectedUnid ? `${selectedUnid} unid.` : `${produto.quantidade} unid.`}
                             </Button>
                         }
@@ -68,16 +70,6 @@ export default function CardItemCarrinho({ produto, onUpdateUnid }: CardItemCarr
                             <Menu.Item key={item} onPress={() => handleSelectedUnid(item)} title={`${item} unid.`} />
                         ))}
                     </Menu>
-                    <View>
-                        <Button
-                            mode="contained"
-                            buttonColor="#EC7229"
-                            labelStyle={styles.fonteButtom}
-                            onPress={() => {}}
-                        >
-                            Finalizar
-                        </Button>
-                    </View>
                 </Card.Actions>
             </Card>
         </View>
@@ -120,8 +112,12 @@ const styles = StyleSheet.create({
         fontFamily: 'FontParaTexto',
         color: '#003D5C',
     },
-    fonteButtom: {
+    fonteButton: {
         fontFamily: 'FontParaTexto',
         color: '#f6f6ff',
+    },
+    fonteButton2: {
+        fontFamily: 'FontParaTexto',
+        color: '#EC7229',
     },
 });
