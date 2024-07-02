@@ -9,6 +9,7 @@ import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType, ProdutoUpdateType } from '@/types/types';
 import { postNewProduct, updateProduct } from '@/services/CampanhaApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -25,6 +26,19 @@ export default function AtualizarProdutoScreen({ navigation, route }: { navigati
     const [visible, setVisible] = useState(false);
     const [quantidadeProduto, setQuantidadeProduto] = useState(product.quantidade_estoque.toString());
     const [displayImg, setDisplayImg] = useState<any>(null);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isDialogVisible, setDialogVisible] = useState(false);
+
+    const showErrorDialog = (message: any) => {
+        console.log("message: ", message);
+        setErrorMessage(message);
+        setDialogVisible(true);
+    };
+
+    const hideErrorDialog = () => {
+        setDialogVisible(false);
+    };
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -67,8 +81,12 @@ export default function AtualizarProdutoScreen({ navigation, route }: { navigati
                 name: 'ProdutosEstoque'
             });
         } catch (error) {
-            console.error('Erro ao adicionar produto:', error);
-            // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+            console.error('Erro ao atualizar produto:', error);
+            let errorMessage = 'Erro ao atualizar produto' + error;
+        if (axios.isAxiosError(error) && error.response?.data?.message) {
+            errorMessage = error.response.data.message;
+        }
+        showErrorDialog(errorMessage);
         }
     };
 
@@ -190,6 +208,18 @@ export default function AtualizarProdutoScreen({ navigation, route }: { navigati
                             </Portal>
                         </View>
                     </View>
+                    <Portal>
+                <Dialog visible={isDialogVisible} onDismiss={hideErrorDialog} style={styles.dialog}>
+                    <Dialog.Title style={styles.dialog_t}>Erro ao atualizar produto</Dialog.Title>
+                    <Dialog.Content>
+                        <Text style={styles.dialog_t} variant="bodyMedium">{errorMessage}</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={handleButtonVoltar} textColor="#EC7229">Voltar para tela inicial</Button>
+                        <Button onPress={hideErrorDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5 }}>Tentar novamente</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
                 </ScrollView>
             </PaperProvider>
         </>

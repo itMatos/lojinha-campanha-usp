@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AtualizarItemCombo from '@/components/AtualizarItemCombo';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType, ProdutoUpdateType } from '@/types/types';
 import { getAllProducts, updateProduct } from '@/services/CampanhaApi';
+import axios from 'axios';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
@@ -34,6 +35,20 @@ export default function AtualizarComboScreen({ navigation, route }: { navigation
     const [selectedImage, setSelectedImage] = useState<string>(product.key_img || '');
     const [visible, setVisible] = useState(false);
     const [itensDoCombo, setItensDoCombo] = useState<ItemComboType[]>(product.combo_products);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isDialogVisible, setDialogVisible] = useState(false);
+
+    const showErrorDialog = (message: any) => {
+        console.log("message: ", message);
+        setErrorMessage(message);
+        setDialogVisible(true);
+    };
+
+    const hideErrorDialog = () => {
+        setDialogVisible(false);
+    };
+
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -118,8 +133,11 @@ export default function AtualizarComboScreen({ navigation, route }: { navigation
         });
     } catch (error) {
         console.error('Erro ao atualizar combo:', error);
-        console.log("eh_combo:", novoProduto.eh_combo);
-        // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+        let errorMessage = 'Erro ao atualizar combo' + error;
+        if (axios.isAxiosError(error) && error.response?.data?.message) {
+            errorMessage = error.response.data.message;
+        }
+        showErrorDialog(errorMessage);
     }
     };
 
@@ -225,6 +243,18 @@ export default function AtualizarComboScreen({ navigation, route }: { navigation
                         </View>
                     </ScrollView>
                 </View>
+                <Portal>
+                <Dialog visible={isDialogVisible} onDismiss={hideErrorDialog} style={styles.dialog}>
+                    <Dialog.Title style={styles.dialog_t}>Erro ao atualizar produto</Dialog.Title>
+                    <Dialog.Content>
+                        <Text style={styles.dialog_t} variant="bodyMedium">{errorMessage}</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={handleButtonVoltar} textColor="#EC7229">Voltar para tela inicial</Button>
+                        <Button onPress={hideErrorDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5 }}>Tentar novamente</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             </PaperProvider>
         </ScrollView>
     );
