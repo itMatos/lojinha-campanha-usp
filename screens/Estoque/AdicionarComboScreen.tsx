@@ -12,67 +12,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AdicionarItemCombo from '@/components/AdicionarItemCombo';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 import { getAllProducts, postNewProduct } from '@/services/CampanhaApi';
+import axios, { AxiosError } from 'axios';
 
 const vw = Dimensions.get('window').width / 100;
 const PlaceholderImage = { uri: './assets/images/icon.png' };
 
-const listaDeProdutos = [
-    {
-        id: '6664576a490582f51482d1c8',
-        nome: 'broche laranja',
-        preco: 5,
-        eh_combo: false,
-        combo_products: [],
-        quantidade_estoque: 0,
-    } as ProdutoIndividualType,
-    {
-        id: '66645957bb9a1a5ec7f1874f',
-        nome: 'combo 2 broches laranja',
-        preco: 12,
-        eh_combo: true,
-        combo_products: [
-            {
-                nome: 'broche laranja',
-                quantidade: 2,
-                id: '66645957bb9a1a5ec7f18750',
-            },
-        ],
-    } as ProdutoComboType,
-    {
-        id: '667ac28ddd88cc8ad8de6854',
-        nome: 'broche rosa',
-        preco: 7,
-        quantidade_estoque: 0,
-        eh_combo: false,
-        combo_products: [],
-    } as ProdutoIndividualType,
-    {
-        id: '667c6daf8610658233de73fc',
-        nome: 'teste italooooo',
-        descricao: 'descricao teste italo',
-        preco: 3.14,
-        quantidade_estoque: 12,
-        eh_combo: false,
-        combo_products: [],
-    } as ProdutoIndividualType,
-];
 
 export default function AdicionarComboScreen({ navigation, route }: { navigation: any; route: any }) {
     const { items }: { items: ProdutosType[] } = route.params;
-    // const [items, setItems] = useState<ProdutosType[]>([]);
-
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const products = await getAllProducts();
-    //             setItems(products);
-    //         } catch (error) {
-    //             console.error('Erro ao buscar produtos:', error);
-    //         }
-    //     };
-
-    //     fetchProducts();
-    // }, []);
 
     console.log("ITEMS AQUI!! ", items);
     const [produtos, setProdutos] = useState<ProdutosType[]>(items);
@@ -87,6 +34,19 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [visible, setVisible] = useState(false);
     const [itensDoCombo, setItensDoCombo] = useState<ItemComboType[]>([]);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isDialogVisible, setDialogVisible] = useState(false);
+
+    const showErrorDialog = (message: any) => {
+        console.log("message: ", message);
+        setErrorMessage(message);
+        setDialogVisible(true);
+    };
+
+    const hideErrorDialog = () => {
+        setDialogVisible(false);
+    };
 
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
@@ -123,12 +83,25 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
 
     const handleAdicionarItemCombo = (nome: string) => {
-        console.log("HANDLE ADICIONAR ITEM COMBO ", nome);
         setItensDoCombo((prevItens) => [...prevItens, { nome: nome, quantidade: 1 } as ItemComboType]);
     };
 
     const handleRemoverItemCombo = (itemId: string) => {
-        setItensDoCombo((prevItens) => prevItens.filter((item) => item.id !== itemId));
+        setItensDoCombo((prevItens) => {
+            const updatedItens = prevItens.filter((item) => item.nome !== itemId);
+            console.log("array depois de atualizar: ", updatedItens);
+            
+            setFormCombo(updatedItens.map((it: ItemComboType) => 
+                <AdicionarItemCombo
+                    itens={produtos}
+                    itemAtual={it}
+                    onAddItem={handleAdicionarItemCombo}
+                    onRemoveItem={handleRemoverItemCombo}
+                />
+            ));
+    
+            return updatedItens;
+        });
     };
 
     const handleAdicionarProdutoCombo = async () => {
@@ -158,18 +131,22 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
         });
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
-        // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+        let errorMessage = 'Erro ao adicionar produto' + error;
+        if (axios.isAxiosError(error) && error.response?.data?.message) {
+            errorMessage = error.response.data.message;
+        }
+        showErrorDialog(errorMessage);
     }
     };
 
     const [formCombo, setFormCombo] = useState([
-        <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+        <AdicionarItemCombo itens={produtos} itemAtual={{nome: "", quantidade: 1}} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
     ]);
 
     const AdicionarFormCombo = () => {
         setFormCombo([
             ...formCombo,
-            <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+            <AdicionarItemCombo itens={produtos} itemAtual={{nome: "", quantidade: 1}} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
         ]);
     };
 
@@ -234,13 +211,13 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                                 ))}
 
                             <Divider style={{ backgroundColor: '#B0B0B0' }}/>
-                            <Button mode="contained" onPress={AdicionarFormCombo} style={{ marginVertical: 20, marginHorizontal: 50 }}>
+                            <Button mode="contained" onPress={AdicionarFormCombo}  textColor='#2196F3' style={{ borderColor: '#2196F3', backgroundColor: 'transperant', borderWidth:1,  marginVertical: 20, marginHorizontal: 75}}>
                                 Adicionar outro produto
                             </Button>
                         </View>
 
                             <View>
-                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{marginLeft:95, marginRight:95}} textColor='white' buttonColor='#2196F3'>
+                                <Button mode="contained" onPress={handleAdicionarProdutoCombo} style={{marginLeft:95, marginRight:95, marginBottom: 10}} textColor='white' buttonColor='#2196F3'>
                                     Salvar combo
                                 </Button>
                             </View>
@@ -262,6 +239,18 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
                         </View>
                     </ScrollView>
                 </View>
+                <Portal>
+                <Dialog visible={isDialogVisible} onDismiss={hideErrorDialog} style={styles.dialog}>
+                    <Dialog.Title style={styles.dialog_t}>Erro ao adicionar produto</Dialog.Title>
+                    <Dialog.Content>
+                        <Text style={styles.dialog_t} variant="bodyMedium">{errorMessage}</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={handleButtonVoltar} textColor="#EC7229">Voltar para tela inicial</Button>
+                        <Button onPress={hideErrorDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5 }}>Tentar novamente</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             </PaperProvider>
         </ScrollView>
     );

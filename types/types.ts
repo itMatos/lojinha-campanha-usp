@@ -46,6 +46,7 @@ export type ProdutoVendaType = {
 }
 
 export type SaleType = {
+    data_hora?: string;
     preco_total: number;
     produtos: ProdutoVendaType[];
 };

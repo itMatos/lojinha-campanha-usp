@@ -12,17 +12,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
-// interface ItemEstoqueType {
-//     id: string;
-//     nome: string;
-//     descricao?: string | '';
-//     preco: number;
-//     eh_combo: boolean;
-//     quantidade_estoque: number | 0;
-//     combo_products?: ItemComboType[];
-//     key_img?: string;
-// }
-
 interface CardItemEstoqueProps {
     navigation: any;
     listaDeProdutos: ProdutosType[]
@@ -41,15 +30,6 @@ export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoqu
         });
     }, []);
 
-    // const handleAddQuantidade = () => {
-    //     onChangeQuantity(itemEstoque.id, itemEstoque.quantidade_estoque + 1);
-    // };
-
-    // const handleSubtractQuantidade = () => {
-    //     if (itemEstoque.quantidade_estoque >= 1) {
-    //         onChangeQuantity(itemEstoque.id, itemEstoque.quantidade_estoque - 1);
-    //     }
-    // };
 
     const handleDeletarProduto = async () => {
         console.log("itemestoque!! ", itemEstoque.nome);
@@ -61,7 +41,7 @@ export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoqu
             // const newItems = [...items, novoProduto];
             // setProdutos(newItems);
     } catch (error) {
-        console.error('Erro ao adicionar produto:', error);
+        console.error('Erro ao remover produto:', error);
         // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
     }
     };
@@ -95,6 +75,17 @@ export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoqu
                     <Card.Content>
                         <Text variant="titleLarge" style={styles.titleText}>{itemEstoque.nome}</Text>
                         <Text variant="bodyLarge" style={styles.bodyText}>{itemEstoque.descricao}</Text>
+                        <View>
+                            { 
+                                itemEstoque.eh_combo && (
+                                itemEstoque.combo_products.map((produto, index) => (
+                                    <View key={index}>
+                                        <Text variant="bodyLarge" style={styles.bodyText}>{`(${produto.quantidade}) ${produto.nome}`}</Text>
+                                    </View>
+                                ))
+                                )
+                            }
+                        </View>
                         <Text variant="titleMedium" style={styles.priceText}>{itemEstoque.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                     </Card.Content>
 
