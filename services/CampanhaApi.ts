@@ -1,8 +1,8 @@
 import axios from 'axios';
 import config from './config';
-import { SaleType, ProdutosType } from '@/types/types';
+import { SaleType, ProdutosType, ProdutoUpdateType } from '@/types/types';
 
-export const CampanhaApiClient = axios.create({ baseURL: process.env.REACT_APP_CAMPANHA_API_URL });
+export const CampanhaApiClient = axios.create({ baseURL: process.env.REACT_APP_CAMPANHA_API_URL});
 
 export async function getAllVendas() {
     const endpoint = '/sales';
@@ -29,7 +29,7 @@ export async function postNewProduct(newProduct : ProdutosType) {
     return res.data;
 }
 
-export async function updateProduct(updateProduct : ProdutosType) {
+export async function updateProduct(updateProduct : ProdutoUpdateType) {
     const endpoint = '/products';
     const res = await CampanhaApiClient.put(endpoint, updateProduct);
     return res.data;

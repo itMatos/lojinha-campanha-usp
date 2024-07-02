@@ -26,6 +26,17 @@ export type ItemComboType = {
     quantidade: number;
 };
 
+export type ProdutoUpdateType = {
+    nome_antigo: string;
+    nome: string;
+    descricao?: string;
+    quantidade_estoque: number;
+    preco: number;
+    eh_combo: boolean;
+    combo_products: ItemComboType[];
+    key_img?: string;
+};
+
 export type ProdutosType = ProdutoIndividualType | ProdutoComboType;
 
 export type ProdutoVendaType = {

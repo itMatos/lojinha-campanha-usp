@@ -20,21 +20,6 @@ export default function AdicionarItemCombo({
 }) {
     console.log("RECEBI ITENS AQUI", itens);
 
-    // const [items, setItems] = useState<ProdutosType[]>([]);
-
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const products = await getAllProducts();
-    //             setItems(products);
-    //         } catch (error) {
-    //             console.error('Erro ao buscar produtos:', error);
-    //         }
-    //     };
-
-    //     fetchProducts();
-    // }, []);
-
     const [showDropDown, setShowDropDown] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState('');
     const [quantidade, setQuantidade] = useState('1');

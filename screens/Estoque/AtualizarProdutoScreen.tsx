@@ -6,7 +6,7 @@ import ImageViewer from '../../components/ImageViewer';
 import { ScrollView } from 'react-native';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
-import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
+import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType, ProdutoUpdateType } from '@/types/types';
 import { postNewProduct, updateProduct } from '@/services/CampanhaApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -43,15 +43,16 @@ export default function AtualizarProdutoScreen({ navigation, route }: { navigati
         result ? setProdutoPreco(result) : setProdutoPreco('0,00');
     };
 
-    const handleAtualizarProdutoIndividual = async () => {
+    const handleAdicionarProdutoIndividual = async () => {
         // Gerar um ID de teste para o novo produto
         const testeId = (Math.random() * (8000 - 1000) + 1000).toString();
-        const novoProduto: ProdutoIndividualType = {
-            id: testeId,
+        const novoProduto: ProdutoUpdateType = {
+            nome_antigo: product.nome,
             nome: produtoNome,
             descricao: produtoDescricao,
             preco: parseFloat(produtoPreco.replace(',', '.')),
             eh_combo: false,
+            combo_products: [],
             quantidade_estoque: parseInt(quantidadeProduto),
             key_img: displayImg,
         };
@@ -163,7 +164,7 @@ export default function AtualizarProdutoScreen({ navigation, route }: { navigati
                         </View>
                         <View style={styles.buttonsContainer}>
                             <View style={styles.buttonAction}>
-                                <Button mode="contained" onPress={handleAtualizarProdutoIndividual} buttonColor='#2196F3' textColor='white' style={{marginLeft:20, marginRight:20}}>
+                                <Button mode="contained" onPress={handleAdicionarProdutoIndividual} buttonColor='#2196F3' textColor='white' style={{marginLeft:20, marginRight:20}}>
                                     Atualizar
                                 </Button>
                             </View>

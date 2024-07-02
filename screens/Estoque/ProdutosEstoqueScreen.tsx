@@ -70,7 +70,7 @@ export default function ProdutosEstoqueScreen({ navigation, route }: { navigatio
                     <View style={styles.listEstoque}>
                         {itens.map((item) => (
                             <View key={item.nome}>
-                                <CardItemEstoque navigation={navigation} itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
+                                <CardItemEstoque navigation={navigation} listaDeProdutos={itens} itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
                             </View>
                         ))}
                     </View>

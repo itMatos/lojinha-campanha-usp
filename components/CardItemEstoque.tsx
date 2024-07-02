@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
 import { deleteProduct } from '@/services/CampanhaApi';
 import AtualizarProdutoScreen from '@/screens/Estoque/AtualizarProdutoScreen';
+import AtualizarComboScreen from '@/screens/Estoque/AtualizarComboScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,11 +25,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 interface CardItemEstoqueProps {
     navigation: any;
+    listaDeProdutos: ProdutosType[]
     itemEstoque: ProdutosType;
     onChangeQuantity: (itemId: string, newQuantity: number) => void;
 }
 
-export default function CardItemEstoque({navigation, itemEstoque, onChangeQuantity }: CardItemEstoqueProps) {
+export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoque, onChangeQuantity }: CardItemEstoqueProps) {
     const [displayImg, setDisplayImg] = useState<any>(null);
 
     useEffect(() => {
@@ -65,7 +67,7 @@ export default function CardItemEstoque({navigation, itemEstoque, onChangeQuanti
     };
 
     const handleUpdateNavigation = () => {
-        itemEstoque.eh_combo? console.log("EH COMBO") : navigation.navigate('AtualizarProduto', itemEstoque)
+        itemEstoque.eh_combo? navigation.navigate('AtualizarCombo', {items: listaDeProdutos, product: itemEstoque}) : navigation.navigate('AtualizarProduto', itemEstoque)
     }
 
     const img = itemEstoque.key_img ? displayImg : 'https://picsum.photos/700';
@@ -80,6 +82,7 @@ export default function CardItemEstoque({navigation, itemEstoque, onChangeQuanti
             <NavigationContainer independent={true}>
                 <Tab.Navigator>
                     <Tab.Screen name="AtualizarProduto" component={AtualizarProdutoScreen} initialParams={itemEstoque} options={{ headerShown: false }}/>
+                    <Tab.Screen name="AtualizarCombo" component={AtualizarComboScreen} initialParams={{items: listaDeProdutos, product: itemEstoque}} options={{ headerShown: false }}/>
                 </Tab.Navigator>
             </NavigationContainer>
             <View>
