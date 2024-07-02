@@ -75,6 +75,9 @@ export default function AtualizarComboScreen({ navigation, route }: { navigation
 
     const handleRemoverItemCombo = (itemId: string) => {
         setItensDoCombo((prevItens) => prevItens.filter((item) => item.nome !== itemId));
+        setFormCombo(itensDoCombo.map( (it : ItemComboType) => 
+            <AtualizarItemCombo itens={produtos} itemAtual={it} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />
+        ))
     };
 
     const handleAdicionarProdutoCombo = async () => {

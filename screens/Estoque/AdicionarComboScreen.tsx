@@ -128,7 +128,10 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     };
 
     const handleRemoverItemCombo = (itemId: string) => {
-        setItensDoCombo((prevItens) => prevItens.filter((item) => item.id !== itemId));
+        setItensDoCombo((prevItens) => prevItens.filter((item) => item.nome !== itemId));
+        setFormCombo(itensDoCombo.map( (it : ItemComboType) => 
+            <AdicionarItemCombo itens={produtos} itemAtual={it} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />
+        ))
     };
 
     const handleAdicionarProdutoCombo = async () => {
@@ -163,13 +166,13 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     };
 
     const [formCombo, setFormCombo] = useState([
-        <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+        <AdicionarItemCombo itens={produtos} itemAtual={{nome: "", quantidade: 1}} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
     ]);
 
     const AdicionarFormCombo = () => {
         setFormCombo([
             ...formCombo,
-            <AdicionarItemCombo itens={produtos} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
+            <AdicionarItemCombo itens={produtos} itemAtual={{nome: "", quantidade: 1}} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />,
         ]);
     };
 

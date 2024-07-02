@@ -3,9 +3,7 @@ import { StyleSheet, View, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
 import { ItemComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
-
-import { useEffect } from 'react';
-import { getAllProducts } from '@/services/CampanhaApi';
+import { Button } from 'react-native-paper';
 
 const vw = Dimensions.get('window').width / 100;
 
@@ -88,6 +86,9 @@ export default function AtualizarItemCombo({
                 style={{ marginTop: 10 }}
                 theme={customTextInputTheme}
             />
+            <Button icon="trash-can" mode="contained-tonal" style={styles.buttonQuantidade} onPress={() => onRemoveItem(selectedProduct)}>
+                Remover
+            </Button>
         </View>
     );
 }
@@ -113,6 +114,11 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // bottom: 0,
         width: '100%',
+    },
+    buttonQuantidade: {
+        flex: 0.1,
+        margin: 0,
+        backgroundColor: '#3DACE1',
     },
     buttonAction: {
         margin: 10,

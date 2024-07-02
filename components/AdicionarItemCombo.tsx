@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
-import { ProdutoIndividualType, ProdutosType } from '@/types/types';
-
+import { ProdutoIndividualType, ProdutosType, ItemComboType } from '@/types/types';
+import { Button } from 'react-native-paper';
 import { useEffect } from 'react';
 import { getAllProducts } from '@/services/CampanhaApi';
 
@@ -11,18 +11,20 @@ const vw = Dimensions.get('window').width / 100;
 
 export default function AdicionarItemCombo({
     itens,
+    itemAtual,
     onAddItem,
     onRemoveItem,
 }: {
     itens: ProdutosType[];
+    itemAtual: ItemComboType;
     onAddItem: (itemId: string) => void;
     onRemoveItem: (itemId: string) => void;
 }) {
     console.log("RECEBI ITENS AQUI", itens);
 
     const [showDropDown, setShowDropDown] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState('');
-    const [quantidade, setQuantidade] = useState('1');
+    const [selectedProduct, setSelectedProduct] = useState(itemAtual.nome);
+    const [quantidade, setQuantidade] = useState(itemAtual.quantidade.toString());
 
     const filteredList = itens
         .filter((item) => !item.eh_combo)
@@ -86,6 +88,9 @@ export default function AdicionarItemCombo({
                 style={{ marginTop: 10 }}
                 theme={customTextInputTheme}
             />
+            <Button icon="trash-can" mode="contained-tonal" style={styles.buttonQuantidade} onPress={() => onRemoveItem(selectedProduct)}>
+                Remover
+            </Button>
         </View>
     );
 }
@@ -111,6 +116,11 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // bottom: 0,
         width: '100%',
+    },
+    buttonQuantidade: {
+        flex: 0.1,
+        margin: 0,
+        backgroundColor: '#3DACE1',
     },
     buttonAction: {
         margin: 10,
