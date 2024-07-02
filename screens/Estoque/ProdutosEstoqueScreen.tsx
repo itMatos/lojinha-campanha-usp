@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, Image } from 'react-native';
 import { Appbar, FAB } from 'react-native-paper';
 import { StatusBar } from 'react-native';
@@ -14,25 +15,29 @@ const vh = Dimensions.get('window').height / 100;
 export default function ProdutosEstoqueScreen({ navigation, route }: { navigation: any; route: any }) {
     const [items, setItems] = useState<ProdutosType[]>([]);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const products = await getAllProducts();
-                setItems(products);
-            } catch (error) {
-                console.error('Erro ao buscar produtos:', error);
-            }
-        };
+    
+    const fetchProducts = async () => {
+        try {
+            const products = await getAllProducts();
+            setItems(products);
+        } catch (error) {
+            console.error('Erro ao buscar produtos:', error);
+        }
+    };
 
-        fetchProducts();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchProducts();
+            console.log("ProductssS: ", items);
+        }, [])
+    );
 
     console.warn(items);
     const [itens, setItens] = useState<ProdutosType[]>(items);
 
     const handleChangeQuantity = (itemId: string, newQuantity: number) => {
         setItens((prevItens) =>
-            prevItens.map((item) => (item.id === itemId ? { ...item, quantidade: newQuantity, valorTotal: item.preco * newQuantity } : item))
+            prevItens.map((item) => (item.nome === itemId ? { ...item, quantidade: newQuantity, valorTotal: item.preco * newQuantity } : item))
         );
     };
 
@@ -64,8 +69,8 @@ export default function ProdutosEstoqueScreen({ navigation, route }: { navigatio
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.listEstoque}>
                         {itens.map((item) => (
-                            <View key={item.id}>
-                                <CardItemEstoque itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
+                            <View key={item.nome}>
+                                <CardItemEstoque navigation={navigation} itemEstoque={item} onChangeQuantity={handleChangeQuantity} />
                             </View>
                         ))}
                     </View>

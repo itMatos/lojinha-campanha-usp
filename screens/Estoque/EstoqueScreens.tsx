@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProdutosEstoqueScreen from './ProdutosEstoqueScreen';
 import AdicionarProdutoScreen from './AdicionarProdutoScreen';
 import AdicionarComboScreen from './AdicionarComboScreen';
+import AtualizarProdutoScreen from './AtualizarProdutoScreen';
 
 export default function EstoqueTabScreens({ navigation }: { navigation: any }) {
     const Stack = createNativeStackNavigator();
@@ -15,6 +16,7 @@ export default function EstoqueTabScreens({ navigation }: { navigation: any }) {
             />
             <Stack.Screen name="AdicionarProduto" component={AdicionarProdutoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="AdicionarCombo" component={AdicionarComboScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="AtualizarProduto" component={AtualizarProdutoScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }

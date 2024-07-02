@@ -1,5 +1,5 @@
 export type ProdutoIndividualType = {
-    id: string;
+    id?: string;
     nome: string;
     descricao?: string;
     preco: number;
@@ -10,7 +10,7 @@ export type ProdutoIndividualType = {
 };
 
 export type ProdutoComboType = {
-    id: string;
+    id?: string;
     nome: string;
     descricao?: string;
     quantidade_estoque: number;
@@ -21,7 +21,7 @@ export type ProdutoComboType = {
 };
 
 export type ItemComboType = {
-    id: string;
+    id?: string;
     nome: string;
     quantidade: number;
 };
