@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Card, Menu, Text, TextInput } from 'react-native-paper';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Button, Card, Menu, Text } from 'react-native-paper';
 
 import { ProdutoVendaType, ProdutosType } from '@/types/types';
 import DropDown from 'react-native-paper-dropdown';
@@ -30,21 +30,28 @@ export default function CardItemCarrinho({ produto, onUpdateUnid }: CardItemCarr
 
     return (
         <View>
-            <Card elevation={1} style={{ margin: 10 }}>
+            <Card elevation={1} style={styles.card}>
                 {/* <Card.Cover source={{ uri: 'https://i.postimg.cc/7ZdzqFMv/undraw-dev-productivity-umsq.png' }} /> */}
                 <Card.Content>
-                    <Text variant="titleLarge">{produto.nome}</Text>
-                    <Text variant="bodyMedium">
-                        Subtotal: {subtotalProduto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    <Text style={styles.fonteTexto} variant="titleLarge">
+                        {produto.nome}
+                    </Text>
+                    <Text style={styles.fonteTexto} variant="bodyMedium">
+                        Quantidade: {produto.quantidade}
+                    </Text>
+                    <Text style={styles.fonteTexto} variant="bodyMedium">
+                        Subtotal: {subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </Text>
                 </Card.Content>
 
                 <Card.Actions>
                     <Button
                         mode="outlined"
+                        labelStyle={styles.fonteButton2}
                         onPress={() => {}}
                         style={{
                             margin: 5,
+                            borderColor: "#EC7229",
                         }}
                     >
                         Remover
@@ -54,7 +61,7 @@ export default function CardItemCarrinho({ produto, onUpdateUnid }: CardItemCarr
                         visible={showMenu}
                         onDismiss={() => setShowMenu(false)}
                         anchor={
-                            <Button mode="contained" onPress={() => setShowMenu(true)}>
+                            <Button buttonColor="#EC7229" mode="contained" onPress={() => setShowMenu(true)} labelStyle={styles.fonteButton}>
                                 {selectedUnid ? `${selectedUnid} unid.` : `${produto.quantidade} unid.`}
                             </Button>
                         }
@@ -83,5 +90,34 @@ const styles = StyleSheet.create({
     buttonWrapper: {
         flex: 1,
         alignItems: 'flex-end',
+    },
+    card: {
+        margin: 8,
+        marginHorizontal: 16,
+        backgroundColor: '#f6f6ff',
+    },
+    chip: {
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        verticalAlign: 'middle',
+    },
+    itemText: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingBottom: 10,
+    },
+    fonteTexto: {
+        fontFamily: 'FontParaTexto',
+        color: '#003D5C',
+    },
+    fonteButton: {
+        fontFamily: 'FontParaTexto',
+        color: '#f6f6ff',
+    },
+    fonteButton2: {
+        fontFamily: 'FontParaTexto',
+        color: '#EC7229',
     },
 });

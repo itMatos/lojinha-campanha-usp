@@ -15,6 +15,7 @@ export default function RootLayout() {
     const { theme } = useMaterial3Theme();
     const [loaded] = useFonts({
         FontParaTexto: require('../assets/fonts/Comfortaa-Bold.ttf'),
+        FontParaTitulo: require('../assets/fonts/MilkyNice.ttf'),
     });
 
     const paperTheme = colorScheme !== 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light };
