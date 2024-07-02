@@ -1,6 +1,7 @@
+import CardItemCarrinho from '@/components/Vendas/CardItemCarrinho';
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { Appbar, Card, Text } from 'react-native-paper';
 
 export default function CarrinhoScreen({ navigation, route }: { navigation: any; route: any }) {
     const { cartItems } = route.params;
@@ -24,13 +25,7 @@ export default function CarrinhoScreen({ navigation, route }: { navigation: any;
 
             <View>
                 {cartItems.map((item: any, index: any) => {
-                    return (
-                        <View key={index}>
-                            <Text>{item.nome}</Text>
-                            <Text>{item.preco}</Text>
-                            <Text>{item.quantidade}</Text>
-                        </View>
-                    );
+                    return <CardItemCarrinho key={index} produto={item} onAddToCart={() => {}} />;
                 })}
             </View>
         </View>

@@ -25,14 +25,23 @@ export default function ProdutosVendasScreen({ navigation, route }: { navigation
     }, [produtos]);
 
     const handleAddProductToCart = (itemId: string) => {
-        produtos.find((produto) => {
-            if (produto.nome === itemId) {
+        const itemInCart = cartItems.find((item) => item.nome === itemId);
+
+        if (itemInCart) {
+            const updatedCartItems = cartItems.map((item) => (item.nome === itemId ? { ...item, quantidade: item.quantidade + 1 } : item));
+            setCartItems(updatedCartItems);
+        } else {
+            const produto = produtos.find((produto) => produto.nome === itemId);
+
+            if (produto) {
                 setCartItems([...cartItems, { nome: produto.nome, preco: produto.preco, quantidade: 1 }]);
             }
-        });
+        }
 
         console.log('Adicionando item ao carrinho:', itemId);
     };
+
+    const totalProducts = cartItems.reduce((total, item) => total + item.quantidade, 0);
 
     return (
         <View style={{ flex: 1 }}>
@@ -51,7 +60,7 @@ export default function ProdutosVendasScreen({ navigation, route }: { navigation
                             })
                         }
                     />
-                    {cartItems.length > 0 && <Badge style={styles.badge}>{cartItems.length}</Badge>}
+                    {totalProducts > 0 && <Badge style={styles.badge}>{totalProducts}</Badge>}
                 </View>
             </Appbar.Header>
 
