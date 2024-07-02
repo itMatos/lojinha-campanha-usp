@@ -27,7 +27,8 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
     const colorScheme = useColorScheme();
     const { theme } = useMaterial3Theme();
 
-    const paperTheme = colorScheme !== 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light };
+    const paperTheme =
+        colorScheme !== 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light };
 
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
@@ -53,13 +54,11 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
             quantidade_estoque: parseInt(quantidadeProduto),
             key_img: displayImg,
         };
-    
-        console.log('Novo produto:', novoProduto);
-    
+
         try {
             const produtoAdicionado = await postNewProduct(novoProduto);
-            console.log("Produto adicionado com sucesso! --> ", produtoAdicionado);
-    
+            console.log('Produto adicionado com sucesso! --> ', produtoAdicionado);
+
             // Atualizar a lista de itens após a adição bem-sucedida
             const newItems = [...items, novoProduto];
 
@@ -106,8 +105,8 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
 
     const customTextInputTheme = {
         colors: {
-            primary: '#2E8EC2',  // Cor azul quando focado
-            text: 'black',    // Cor do texto cinza
+            primary: '#2E8EC2', // Cor azul quando focado
+            text: 'black', // Cor do texto cinza
             background: 'white', // Cor de fundo
         },
     };
@@ -116,8 +115,11 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
         <>
             <PaperProvider theme={paperTheme}>
                 <Appbar.Header mode="center-aligned" elevated style={styles.barCima}>
-                    <Appbar.BackAction onPress={showDialog} color='white'/>
-                    <Appbar.Content title="Adicionar produto" titleStyle={{color: 'white', fontFamily: 'Milky Nice'}}/>
+                    <Appbar.BackAction onPress={showDialog} color="white" />
+                    <Appbar.Content
+                        title="Adicionar produto"
+                        titleStyle={{ color: 'white', fontFamily: 'Milky Nice' }}
+                    />
                     {/* <Appbar.Action icon="magnify" onPress={() => console.log("seilaaa")} /> */}
                 </Appbar.Header>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -136,7 +138,7 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                                     label="Descrição"
                                     value={produtoDescricao}
                                     onChangeText={(text) => setProdutoDescricao(text)}
-                                    style={{ margin: 10,backgroundColor: 'white' }}
+                                    style={{ margin: 10, backgroundColor: 'white' }}
                                     mode="outlined"
                                     theme={customTextInputTheme}
                                 />
@@ -145,7 +147,7 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                                     value={produtoPreco}
                                     onChangeText={(text) => handlePrecoChange(text)}
                                     keyboardType="numeric"
-                                    style={{ margin: 10,backgroundColor: 'white' }}
+                                    style={{ margin: 10, backgroundColor: 'white' }}
                                     mode="outlined"
                                     theme={customTextInputTheme}
                                 />
@@ -154,26 +156,49 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                                     value={quantidadeProduto}
                                     onChangeText={(text) => setQuantidadeProduto(text)}
                                     keyboardType="numeric"
-                                    style={{ margin: 10,backgroundColor: 'white' }}
+                                    style={{ margin: 10, backgroundColor: 'white' }}
                                     mode="outlined"
                                     theme={customTextInputTheme}
                                 />
                             </View>
                             <View style={styles.container}>
-                                <Button onPress={pickImageAsync} textColor='white' buttonColor='#2196F3' style={{ marginLeft:120, marginRight: 120, marginBottom: 10, }}>Choose a photo</Button>
+                                <Button
+                                    onPress={pickImageAsync}
+                                    textColor="white"
+                                    buttonColor="#2196F3"
+                                    style={{ marginLeft: 120, marginRight: 120, marginBottom: 10 }}
+                                >
+                                    Choose a photo
+                                </Button>
                                 <View style={styles.imageContainer}>
-                                    {displayImg && <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />}
+                                    {displayImg && (
+                                        <ImageViewer
+                                            placeholderImageSource={PlaceholderImage}
+                                            selectedImage={selectedImage}
+                                        />
+                                    )}
                                 </View>
                             </View>
                         </View>
                         <View style={styles.buttonsContainer}>
                             <View style={styles.buttonAction}>
-                                <Button mode="contained" onPress={handleAdicionarProdutoIndividual} buttonColor='#2196F3' textColor='white' style={{marginLeft:20, marginRight:20}}>
+                                <Button
+                                    mode="contained"
+                                    onPress={handleAdicionarProdutoIndividual}
+                                    buttonColor="#2196F3"
+                                    textColor="white"
+                                    style={{ marginLeft: 20, marginRight: 20 }}
+                                >
                                     Adicionar
                                 </Button>
                             </View>
                             <View style={styles.buttonAction}>
-                                <Button mode="outlined" onPress={showDialog} textColor='#2196F3' style={{ borderColor: '#2196F3',marginLeft:20, marginRight:20}}>
+                                <Button
+                                    mode="outlined"
+                                    onPress={showDialog}
+                                    textColor="#2196F3"
+                                    style={{ borderColor: '#2196F3', marginLeft: 20, marginRight: 20 }}
+                                >
                                     Voltar
                                 </Button>
                             </View>
@@ -182,13 +207,26 @@ export default function AdicionarProdutoScreen({ navigation, route }: { navigati
                         <View>
                             <Portal>
                                 <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
-                                    <Dialog.Title style={styles.dialog_t}>Deseja voltar para a tela de estoque?</Dialog.Title>
+                                    <Dialog.Title style={styles.dialog_t}>
+                                        Deseja voltar para a tela de estoque?
+                                    </Dialog.Title>
                                     <Dialog.Content>
-                                        <Text style={styles.dialog_t} variant="bodyMedium">Ao voltar, seu progresso será perdido.</Text>
+                                        <Text style={styles.dialog_t} variant="bodyMedium">
+                                            Ao voltar, seu progresso será perdido.
+                                        </Text>
                                     </Dialog.Content>
                                     <Dialog.Actions>
-                                        <Button onPress={() => handleButtonVoltar()} textColor="#EC7229">Sim, desejo voltar</Button>
-                                        <Button onPress={hideDialog} buttonColor="#2196F3" textColor="white" style={{ borderRadius: 5}}>Cancelar</Button>
+                                        <Button onPress={() => handleButtonVoltar()} textColor="#EC7229">
+                                            Sim, desejo voltar
+                                        </Button>
+                                        <Button
+                                            onPress={hideDialog}
+                                            buttonColor="#2196F3"
+                                            textColor="white"
+                                            style={{ borderRadius: 5 }}
+                                        >
+                                            Cancelar
+                                        </Button>
                                     </Dialog.Actions>
                                 </Dialog>
                             </Portal>
@@ -237,7 +275,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     barCima: {
-        backgroundColor: '#3DACE1'
+        backgroundColor: '#3DACE1',
     },
     dialog: {
         backgroundColor: 'white',

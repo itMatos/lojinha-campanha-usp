@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet, Dimensions } from 'react-native';
-import { Appbar, Button, Dialog, Portal, Text } from 'react-native-paper';
-import * as CampanhaApiService from '@/services/CampanhaApi';
+import { Appbar, Button, Dialog, Portal, Text, ActivityIndicator } from 'react-native-paper';
 import { postNewSale } from '@/services/CampanhaApi';
 import { ProdutoVendaType, SaleType } from '@/types/types';
 
@@ -10,7 +9,7 @@ const vw = Dimensions.get('window').width / 100;
 export default function PagamentoScreen({ navigation, route }: { navigation: any; route: any }) {
     const { cartItemsParams } = route.params;
     const produtos: ProdutoVendaType[] = cartItemsParams;
-
+    const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
 
     const showDialog = () => setVisible(true);
@@ -21,6 +20,7 @@ export default function PagamentoScreen({ navigation, route }: { navigation: any
     }, 0);
 
     const handleFinalizarVenda = async () => {
+        setLoading(true);
         const novaVenda: SaleType = {
             produtos: produtos,
             preco_total: precoTotal,
@@ -38,6 +38,9 @@ export default function PagamentoScreen({ navigation, route }: { navigation: any
             });
         } catch (error) {
             console.error('Tente novamente. Erro ao finalizar venda:', error);
+        } finally {
+            setLoading(false);
+            hideDialog();
         }
     };
 
@@ -78,26 +81,33 @@ export default function PagamentoScreen({ navigation, route }: { navigation: any
                 <View>
                     <Portal>
                         <Dialog visible={visible} onDismiss={hideDialog} style={styles.dialog}>
-                            <Dialog.Title style={styles.dialog_t}>Deseja finalizar a venda?</Dialog.Title>
-                            <Dialog.Content>
-                                <Text style={styles.dialog_t} variant="bodyLarge">
-                                    Ao finalizar a venda, os dados serão salvos no histórico e você retornará para a
-                                    tela inicial de Vendas.
-                                </Text>
-                            </Dialog.Content>
-                            <Dialog.Actions>
-                                <Button onPress={() => handleFinalizarVenda()} textColor="#EC7229">
-                                    Sim, desejo finalizar venda
-                                </Button>
-                                <Button
-                                    onPress={hideDialog}
-                                    buttonColor="#2196F3"
-                                    textColor="white"
-                                    style={{ borderRadius: 5 }}
-                                >
-                                    Cancelar
-                                </Button>
-                            </Dialog.Actions>
+                            <View>{loading && <ActivityIndicator />}</View>
+                            <View>
+                                {!loading && (
+                                    <>
+                                        <Dialog.Title style={styles.dialog_t}>Deseja finalizar a venda?</Dialog.Title>
+                                        <Dialog.Content>
+                                            <Text style={styles.dialog_t} variant="bodyLarge">
+                                                Ao finalizar a venda, os dados serão salvos no histórico e você
+                                                retornará para a tela inicial de Vendas.
+                                            </Text>
+                                        </Dialog.Content>
+                                        <Dialog.Actions>
+                                            <Button onPress={() => handleFinalizarVenda()} textColor="#EC7229">
+                                                Sim, desejo finalizar venda
+                                            </Button>
+                                            <Button
+                                                onPress={hideDialog}
+                                                buttonColor="#2196F3"
+                                                textColor="white"
+                                                style={{ borderRadius: 5 }}
+                                            >
+                                                Cancelar
+                                            </Button>
+                                        </Dialog.Actions>
+                                    </>
+                                )}
+                            </View>
                         </Dialog>
                     </Portal>
                 </View>
