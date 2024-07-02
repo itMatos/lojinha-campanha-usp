@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as CampanhaApiService from '@/services/CampanhaApi';
 
 export default function ProdutosVendasScreen({ navigation, route }: { navigation: any; route: any }) {
+    const { cartItemsParams } = route.params || {};
     const [produtos, setProdutos] = useState<ProdutosType[]>([]);
     const [cartItems, setCartItems] = useState<ProdutoVendaType[]>([]);
 
@@ -25,11 +26,19 @@ export default function ProdutosVendasScreen({ navigation, route }: { navigation
         }
     }, [produtos]);
 
-    const handleAddProductToCart = (itemId: string) => {
+    useEffect(() => {
+        if (cartItemsParams) {
+            setCartItems(cartItemsParams);
+        }
+    }, [cartItemsParams]);
+
+    const handleAddProductToCart = (itemId: string, qtd: number) => {
         const itemInCart = cartItems.find((item) => item.nome === itemId);
 
         if (itemInCart) {
-            const updatedCartItems = cartItems.map((item) => (item.nome === itemId ? { ...item, quantidade: item.quantidade + 1 } : item));
+            const updatedCartItems = cartItems.map((item) =>
+                item.nome === itemId ? { ...item, quantidade: item.quantidade + 1 } : item
+            );
             setCartItems(updatedCartItems);
         } else {
             const produto = produtos.find((produto) => produto.nome === itemId);
@@ -38,8 +47,6 @@ export default function ProdutosVendasScreen({ navigation, route }: { navigation
                 setCartItems([...cartItems, { nome: produto.nome, preco: produto.preco, quantidade: 1 }]);
             }
         }
-
-        console.log('Adicionando item ao carrinho:', itemId);
     };
 
     const totalProducts = cartItems.reduce((total, item) => total + item.quantidade, 0);
@@ -49,21 +56,25 @@ export default function ProdutosVendasScreen({ navigation, route }: { navigation
             <View style={{ flex: 1 }}>
                 <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-                <Appbar.Header mode="center-aligned" elevated style={{backgroundColor: '#3DACE1'}}>
+                <Appbar.Header mode="center-aligned" elevated style={{ backgroundColor: '#3DACE1' }}>
                     <View style={styles.logoContainer}>
-                        <Image source={require('../../assets/images/logo.png')} style={styles.logo} resizeMode="contain"/>
+                        <Image
+                            source={require('../../assets/images/logo.png')}
+                            style={styles.logo}
+                            resizeMode="contain"
+                        />
                     </View>
                     {/* <Appbar.BackAction onPress={() => {}} /> */}
-                    <Appbar.Content title="Vendas" color="#F6F6FF" titleStyle={styles.titulo}/>
+                    <Appbar.Content title="Vendas" color="#F6F6FF" titleStyle={styles.titulo} />
                     <View style={styles.badgeContainer}>
                         <Appbar.Action
                             icon="cart-outline"
                             color="#f6f6ff"
-                            
                             onPress={() =>
                                 navigation.navigate({
-                                    name: 'CarrinhoVendas',
+                                    name: 'CarrinhoScreen',
                                     params: { cartItems: cartItems },
+                                    merge: true,
                                 })
                             }
                         />
@@ -99,11 +110,11 @@ const styles = StyleSheet.create({
         top: 0,
         right: 0,
     },
-    fundo:{
+    fundo: {
         flex: 1,
-        backgroundColor: "black",
+        backgroundColor: 'black',
     },
-    titulo:{
+    titulo: {
         fontFamily: 'Milky Nice',
     },
     logoContainer: {
