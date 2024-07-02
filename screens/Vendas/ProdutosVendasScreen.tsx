@@ -4,12 +4,13 @@ import { Appbar, Badge, FAB, Text } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import CardItemVenda from '@/components/Vendas/CardItemVenda';
 import { ScrollView } from 'react-native';
-import { ProdutosType } from '@/types/types';
+import { ProdutosType, ProdutoVendaType } from '@/types/types';
 
 import * as CampanhaApiService from '@/services/CampanhaApi';
 
-export default function ProdutosVendasScreen() {
+export default function ProdutosVendasScreen({ navigation, route }: { navigation: any; route: any }) {
     const [produtos, setProdutos] = useState<ProdutosType[]>([]);
+    const [cartItems, setCartItems] = useState<ProdutoVendaType[]>([]);
 
     useEffect(() => {
         if (produtos.length === 0) {
@@ -23,6 +24,16 @@ export default function ProdutosVendasScreen() {
         }
     }, [produtos]);
 
+    const handleAddProductToCart = (itemId: string) => {
+        produtos.find((produto) => {
+            if (produto.nome === itemId) {
+                setCartItems([...cartItems, { nome: produto.nome, preco: produto.preco, quantidade: 1 }]);
+            }
+        });
+
+        console.log('Adicionando item ao carrinho:', itemId);
+    };
+
     return (
         <View style={{ flex: 1 }}>
             <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -31,8 +42,16 @@ export default function ProdutosVendasScreen() {
                 {/* <Appbar.BackAction onPress={() => {}} /> */}
                 <Appbar.Content title="Vendas" />
                 <View style={styles.badgeContainer}>
-                    <Appbar.Action icon="cart-outline" onPress={() => {}} />
-                    {produtos.length > 0 && <Badge style={styles.badge}>{produtos.length}</Badge>}
+                    <Appbar.Action
+                        icon="cart-outline"
+                        onPress={() =>
+                            navigation.navigate({
+                                name: 'CarrinhoVendas',
+                                params: { cartItems: cartItems },
+                            })
+                        }
+                    />
+                    {cartItems.length > 0 && <Badge style={styles.badge}>{cartItems.length}</Badge>}
                 </View>
             </Appbar.Header>
 
@@ -45,7 +64,7 @@ export default function ProdutosVendasScreen() {
                     )}
                     {produtos.map((produto) => (
                         <View key={produto.nome}>
-                            <CardItemVenda produtoVenda={produto} />
+                            <CardItemVenda produtoVenda={produto} onAddToCart={handleAddProductToCart} />
                         </View>
                     ))}
                 </View>

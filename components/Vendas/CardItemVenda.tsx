@@ -3,24 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Card, Chip, IconButton, Text } from 'react-native-paper';
 import { ProdutosType } from '@/types/types';
 
-interface ItemType {
-    id: number;
-    produto: {
-        id: number;
-        nome: string;
-        descricao: string;
-        preco: number;
-    };
-    quantidade: number;
-    valorTotal: number;
-}
-
 interface CardItemVendaProps {
     produtoVenda: ProdutosType;
     // onChangeQuantity: (itemId: string, newQuantity: number) => void;
+    onAddToCart: (itemId: string) => void;
 }
 
-export default function CardItemVenda({ produtoVenda }: CardItemVendaProps) {
+export default function CardItemVenda({ produtoVenda, onAddToCart }: CardItemVendaProps) {
     return (
         <View>
             <Card elevation={1} style={styles.card}>
@@ -33,22 +22,12 @@ export default function CardItemVenda({ produtoVenda }: CardItemVendaProps) {
 
                 <Card.Actions>
                     <View>
-                        {/* <Chip mode="flat" disabled style={styles.chip}>
-                            <IconButton
-                                icon="minus-circle"
-                                iconColor={'blue'}
-                                size={30}
-                                disabled={produtoVenda.quantidade === 1}
-                                onPress={handleSubtractQuantidade}
-                            />
-                            <View>
-                                <Text variant="titleMedium" style={styles.itemText}>
-                                    {itemVenda.quantidade}
-                                </Text>
-                            </View>
-                            <IconButton icon="plus-circle" iconColor={'blue'} size={30} onPress={handleAddQuantidade} />
-                        </Chip> */}
-                        <Button mode="contained" onPress={() => {}}>
+                        <Button
+                            mode="contained"
+                            onPress={() => {
+                                onAddToCart(produtoVenda.nome);
+                            }}
+                        >
                             Adicionar ao carrinho
                         </Button>
                     </View>
