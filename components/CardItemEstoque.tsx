@@ -80,8 +80,12 @@ export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoqu
                 <Stack.Screen name="AtualizarProduto" component={AtualizarProdutoScreen} initialParams={itemEstoque} options={{ headerShown: false }} />
             </Stack.Navigator> */}
             <NavigationContainer independent={true}>
-                <Tab.Navigator>
-                    <Tab.Screen name="AtualizarProduto" component={AtualizarProdutoScreen} initialParams={itemEstoque} options={{ headerShown: false }}/>
+                <Tab.Navigator
+                    screenOptions={({ route }) => ({
+                        tabBarStyle: { display: 'none' }  // Oculta a barra de navegação
+                    })}
+                >
+                    <Tab.Screen name="AtualizarProduto" component={AtualizarProdutoScreen} initialParams={itemEstoque} options={{ headerShown: false }} />
                     <Tab.Screen name="AtualizarCombo" component={AtualizarComboScreen} initialParams={{items: listaDeProdutos, product: itemEstoque}} options={{ headerShown: false }}/>
                 </Tab.Navigator>
             </NavigationContainer>
