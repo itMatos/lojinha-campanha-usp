@@ -5,7 +5,7 @@ import { postNewSale } from '@/services/CampanhaApi';
 import { ProdutoVendaType, SaleType } from '@/types/types';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const min = (x, y) => {
+const min = (x: number, y: number) => {
     return x < y ? x : y;
 };
 
@@ -55,7 +55,7 @@ export default function PagamentoScreen({ navigation, route }: { navigation: any
                 <Appbar.Header mode="center-aligned" elevated style={{backgroundColor: '#3DACE1'}}>
                     <Appbar.Content title="Pagamento" color="#F6F6FF" titleStyle={styles.titulo}/>
                 </Appbar.Header>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                     <View
                         style={{
                             alignItems: 'center',
