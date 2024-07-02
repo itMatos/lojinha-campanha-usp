@@ -1,5 +1,5 @@
 const config = {
-    campanhaApi: process.env.REACT_APP_CAMPANHA_API_URL,
+    campanhaApi: process.env.EXPO_PUBLIC_CAMPANHA_API_URL
 };
 
 export default config;
