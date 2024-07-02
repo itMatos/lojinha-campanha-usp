@@ -4,6 +4,7 @@ import ProdutosVendasScreen from './ProdutosVendasScreen';
 import { ProdutoVendaType, ProdutosType } from '@/types/types';
 import * as CampanhaApiService from '@/services/CampanhaApi';
 import CarrinhoScreen from './CarrinhoScreen';
+import PagamentoScreen from './PagamentoScreen';
 
 export default function VendasTabScreens({ navigation }: { navigation: any }) {
     const Stack = createNativeStackNavigator();
@@ -15,6 +16,7 @@ export default function VendasTabScreens({ navigation }: { navigation: any }) {
                 options={{ headerShown: false }}
             />
             <Stack.Screen name="CarrinhoScreen" component={CarrinhoScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="PagamentoScreen" component={PagamentoScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }

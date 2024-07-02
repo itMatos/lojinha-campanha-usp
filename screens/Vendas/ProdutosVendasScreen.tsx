@@ -9,7 +9,7 @@ import { ProdutosType, ProdutoVendaType } from '@/types/types';
 import * as CampanhaApiService from '@/services/CampanhaApi';
 
 export default function ProdutosVendasScreen({ navigation, route }: { navigation: any; route: any }) {
-    const { cartItemsParams } = route.params;
+    const { cartItemsParams } = route.params || {};
     const [produtos, setProdutos] = useState<ProdutosType[]>([]);
     const [cartItems, setCartItems] = useState<ProdutoVendaType[]>([]);
 
