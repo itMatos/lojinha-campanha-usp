@@ -4,6 +4,7 @@ import { Button, Card, Chip, IconButton, Text } from 'react-native-paper';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ItemComboType, ProdutoComboType, ProdutoIndividualType, ProdutosType } from '@/types/types';
+import { deleteProduct } from '@/services/CampanhaApi';
 
 // interface ItemEstoqueType {
 //     id: string;
@@ -42,6 +43,21 @@ export default function CardItemEstoque({ itemEstoque, onChangeQuantity }: CardI
     //     }
     // };
 
+    const handleDeletarProduto = async () => {
+        console.log("itemestoque!! ", itemEstoque.nome);
+        
+        try {
+            await deleteProduct(itemEstoque.nome);
+    
+            // Atualizar a lista de itens após a adição bem-sucedida
+            // const newItems = [...items, novoProduto];
+            // setProdutos(newItems);
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        // Trate o erro, por exemplo, exibindo uma mensagem para o usuário
+    }
+    };
+
     const img = itemEstoque.key_img ? displayImg : 'https://picsum.photos/700';
 
     return (
@@ -59,7 +75,7 @@ export default function CardItemEstoque({ itemEstoque, onChangeQuantity }: CardI
                         {itemEstoque.eh_combo ? 'combo' : itemEstoque.quantidade_estoque}
                     </Button>
                     <View style={styles.actionButtons}>
-                        <Button mode="outlined" onPress={() => console.log('botao de deletar')} style={{ margin: 3 }}>
+                        <Button mode="outlined" onPress={handleDeletarProduto} style={{ margin: 3 }}>
                             Deletar
                         </Button>
 
