@@ -123,15 +123,25 @@ export default function AdicionarComboScreen({ navigation, route }: { navigation
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
 
     const handleAdicionarItemCombo = (nome: string) => {
-        console.log("HANDLE ADICIONAR ITEM COMBO ", nome);
         setItensDoCombo((prevItens) => [...prevItens, { nome: nome, quantidade: 1 } as ItemComboType]);
     };
 
     const handleRemoverItemCombo = (itemId: string) => {
-        setItensDoCombo((prevItens) => prevItens.filter((item) => item.nome !== itemId));
-        setFormCombo(itensDoCombo.map( (it : ItemComboType) => 
-            <AdicionarItemCombo itens={produtos} itemAtual={it} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />
-        ))
+        setItensDoCombo((prevItens) => {
+            const updatedItens = prevItens.filter((item) => item.nome !== itemId);
+            console.log("array depois de atualizar: ", updatedItens);
+            
+            setFormCombo(updatedItens.map((it: ItemComboType) => 
+                <AdicionarItemCombo
+                    itens={produtos}
+                    itemAtual={it}
+                    onAddItem={handleAdicionarItemCombo}
+                    onRemoveItem={handleRemoverItemCombo}
+                />
+            ));
+    
+            return updatedItens;
+        });
     };
 
     const handleAdicionarProdutoCombo = async () => {

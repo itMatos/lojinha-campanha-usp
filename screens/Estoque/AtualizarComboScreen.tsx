@@ -74,10 +74,21 @@ export default function AtualizarComboScreen({ navigation, route }: { navigation
     };
 
     const handleRemoverItemCombo = (itemId: string) => {
-        setItensDoCombo((prevItens) => prevItens.filter((item) => item.nome !== itemId));
-        setFormCombo(itensDoCombo.map( (it : ItemComboType) => 
-            <AtualizarItemCombo itens={produtos} itemAtual={it} onAddItem={handleAdicionarItemCombo} onRemoveItem={handleRemoverItemCombo} />
-        ))
+        setItensDoCombo((prevItens) => {
+            const updatedItens = prevItens.filter((item) => item.nome !== itemId);
+            console.log("array depois de atualizar: ", updatedItens);
+            
+            setFormCombo(updatedItens.map((it: ItemComboType) => 
+                <AtualizarItemCombo
+                    itens={produtos}
+                    itemAtual={it}
+                    onAddItem={handleAdicionarItemCombo}
+                    onRemoveItem={handleRemoverItemCombo}
+                />
+            ));
+    
+            return updatedItens;
+        });
     };
 
     const handleAdicionarProdutoCombo = async () => {

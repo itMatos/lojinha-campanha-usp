@@ -91,6 +91,17 @@ export default function CardItemEstoque({navigation, listaDeProdutos, itemEstoqu
                     <Card.Content>
                         <Text variant="titleLarge" style={styles.titleText}>{itemEstoque.nome}</Text>
                         <Text variant="bodyLarge" style={styles.bodyText}>{itemEstoque.descricao}</Text>
+                        <View>
+                            { 
+                                itemEstoque.eh_combo && (
+                                itemEstoque.combo_products.map((produto, index) => (
+                                    <View key={index}>
+                                        <Text variant="bodyLarge" style={styles.bodyText}>{`(${produto.quantidade}) ${produto.nome}`}</Text>
+                                    </View>
+                                ))
+                                )
+                            }
+                        </View>
                         <Text variant="titleMedium" style={styles.priceText}>{itemEstoque.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                     </Card.Content>
 
