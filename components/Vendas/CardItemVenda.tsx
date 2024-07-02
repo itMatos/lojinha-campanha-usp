@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Card, Chip, IconButton, Text } from 'react-native-paper';
+import { ProdutosType } from '@/types/types';
 
 interface ItemType {
     id: number;
@@ -15,38 +16,29 @@ interface ItemType {
 }
 
 interface CardItemVendaProps {
-    itemVenda: ItemType;
-    onChangeQuantity: (itemId: number, newQuantity: number) => void;
+    produtoVenda: ProdutosType;
+    // onChangeQuantity: (itemId: string, newQuantity: number) => void;
 }
 
-export default function CardItemVenda({ itemVenda, onChangeQuantity }: CardItemVendaProps) {
-    const handleAddQuantidade = () => {
-        onChangeQuantity(itemVenda.id, itemVenda.quantidade + 1);
-    };
-
-    const handleSubtractQuantidade = () => {
-        if (itemVenda.quantidade > 1) {
-            onChangeQuantity(itemVenda.id, itemVenda.quantidade - 1);
-        }
-    };
+export default function CardItemVenda({ produtoVenda }: CardItemVendaProps) {
     return (
         <View>
             <Card elevation={1} style={styles.card}>
                 <Card.Cover source={{ uri: 'https://i.postimg.cc/7ZdzqFMv/undraw-dev-productivity-umsq.png' }} />
                 <Card.Content>
-                    <Text variant="titleLarge">{itemVenda.produto.nome}</Text>
-                    <Text variant="bodyMedium">{itemVenda.produto.descricao}</Text>
-                    <Text variant="bodyMedium">{itemVenda.produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                    <Text variant="titleLarge">{produtoVenda.nome}</Text>
+                    <Text variant="bodyMedium">{produtoVenda.descricao}</Text>
+                    <Text variant="bodyMedium">{produtoVenda.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
                 </Card.Content>
 
                 <Card.Actions>
                     <View>
-                        <Chip mode="flat" disabled style={styles.chip}>
+                        {/* <Chip mode="flat" disabled style={styles.chip}>
                             <IconButton
                                 icon="minus-circle"
                                 iconColor={'blue'}
                                 size={30}
-                                disabled={itemVenda.quantidade === 1}
+                                disabled={produtoVenda.quantidade === 1}
                                 onPress={handleSubtractQuantidade}
                             />
                             <View>
@@ -55,7 +47,10 @@ export default function CardItemVenda({ itemVenda, onChangeQuantity }: CardItemV
                                 </Text>
                             </View>
                             <IconButton icon="plus-circle" iconColor={'blue'} size={30} onPress={handleAddQuantidade} />
-                        </Chip>
+                        </Chip> */}
+                        <Button mode="contained" onPress={() => {}}>
+                            Adicionar ao carrinho
+                        </Button>
                     </View>
                 </Card.Actions>
             </Card>

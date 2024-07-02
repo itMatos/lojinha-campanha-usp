@@ -2,7 +2,7 @@ import React from 'react';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from 'react-native';
 import { StyleSheet, SafeAreaView } from 'react-native';
-import VendasScreen from '@/screens/VendasScreen';
+import VendasTabScreens from '@/screens/Vendas/VendasTabScreens';
 import HistoricoScreen from '@/screens/HistoricoScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigation, PaperProvider } from 'react-native-paper';
@@ -60,7 +60,7 @@ export default function TabLayout() {
         >
             <Tab.Screen
                 name="Vendas"
-                component={VendasScreen}
+                component={VendasTabScreens}
                 options={{
                     tabBarLabel: 'Vendas',
                     tabBarIcon: ({ color, size }) => {

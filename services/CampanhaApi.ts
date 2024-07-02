@@ -1,8 +1,5 @@
-import axios from 'axios';
-import config from './config';
+import { CampanhaApiClient } from './Clients';
 import { SaleType, ProdutosType } from '@/types/types';
-
-export const CampanhaApiClient = axios.create({ baseURL: process.env.REACT_APP_CAMPANHA_API_URL });
 
 export async function getAllVendas() {
     const endpoint = '/sales';

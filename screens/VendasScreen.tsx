@@ -4,7 +4,6 @@ import { Appbar } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import CardItemVenda from '@/components/CardItemVenda';
 import { ScrollView } from 'react-native';
 import { Dimensions } from 'react-native';
 
@@ -63,9 +62,7 @@ export default function VendasScreen() {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.listVendas}>
                     {itens.map((item) => (
-                        <View key={item.id}>
-                            <CardItemVenda itemVenda={item} onChangeQuantity={handleChangeQuantity} />
-                        </View>
+                        <View key={item.id}></View>
                     ))}
                 </View>
             </ScrollView>
