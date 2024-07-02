@@ -6,7 +6,7 @@ import { ProdutosType } from '@/types/types';
 interface CardItemVendaProps {
     produtoVenda: ProdutosType;
     // onChangeQuantity: (itemId: string, newQuantity: number) => void;
-    onAddToCart: (itemId: string) => void;
+    onAddToCart: (itemId: string, qtd: number) => void;
 }
 
 export default function CardItemVenda({ produtoVenda, onAddToCart }: CardItemVendaProps) {
@@ -17,7 +17,9 @@ export default function CardItemVenda({ produtoVenda, onAddToCart }: CardItemVen
                 <Card.Content>
                     <Text variant="titleLarge">{produtoVenda.nome}</Text>
                     <Text variant="bodyMedium">{produtoVenda.descricao}</Text>
-                    <Text variant="bodyMedium">{produtoVenda.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+                    <Text variant="bodyMedium">
+                        {produtoVenda.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </Text>
                 </Card.Content>
 
                 <Card.Actions>
@@ -25,7 +27,7 @@ export default function CardItemVenda({ produtoVenda, onAddToCart }: CardItemVen
                         <Button
                             mode="contained"
                             onPress={() => {
-                                onAddToCart(produtoVenda.nome);
+                                onAddToCart(produtoVenda.nome, 1);
                             }}
                         >
                             Adicionar ao carrinho

@@ -1,10 +1,26 @@
 import CardItemCarrinho from '@/components/Vendas/CardItemCarrinho';
+import { ProdutoVendaType } from '@/types/types';
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Appbar, Card, Text } from 'react-native-paper';
 
-export default function CarrinhoScreen({ navigation, route }: { navigation: any; route: any }) {
+interface CarrinhoScreenProps {
+    navigation: any;
+    route: any;
+}
+
+export default function CarrinhoScreen({ navigation, route }: CarrinhoScreenProps) {
     const { cartItems } = route.params;
+    const [allCartItems, setAllCartItems] = useState<ProdutoVendaType[]>(cartItems);
+
+    useEffect(() => {
+        setAllCartItems(cartItems);
+    }, [cartItems]);
+
+    const handleUpdateUnid = (itemNome: string, quantidade: number) => {
+        const updatedCartItems = allCartItems.map((item) => (item.nome === itemNome ? { ...item, quantidade } : item));
+        setAllCartItems(updatedCartItems);
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -13,7 +29,8 @@ export default function CarrinhoScreen({ navigation, route }: { navigation: any;
                     onPress={() =>
                         navigation.navigate({
                             name: 'ProdutosVendasScreen',
-                            params: { cartItems: cartItems },
+                            params: { cartItemsParams: allCartItems },
+                            merge: true,
                         })
                     }
                 />
@@ -25,7 +42,7 @@ export default function CarrinhoScreen({ navigation, route }: { navigation: any;
 
             <View>
                 {cartItems.map((item: any, index: any) => {
-                    return <CardItemCarrinho key={index} produto={item} onAddToCart={() => {}} />;
+                    return <CardItemCarrinho key={index} produto={item} onUpdateUnid={handleUpdateUnid} />;
                 })}
             </View>
         </View>
