@@ -86,7 +86,7 @@ export default function AtualizarItemCombo({
                 style={{ marginTop: 10 }}
                 theme={customTextInputTheme}
             />
-            <Button icon="trash-can" mode="contained-tonal" style={styles.buttonQuantidade} onPress={() => onRemoveItem(selectedProduct)}>
+            <Button icon="trash-can" mode="contained-tonal" style={styles.buttonQuantidade} onPress={() => onRemoveItem(selectedProduct)} >
                 Remover
             </Button>
         </View>
