@@ -35,7 +35,7 @@ export async function updateProduct(updateProduct : ProdutosType) {
     return res.data;
 }
 
-export async function deleteProduct(productName = String) {
+export async function deleteProduct(productName : String) {
     const endpoint = '/products';
     const res = await CampanhaApiClient.delete(endpoint, {
         data: {
