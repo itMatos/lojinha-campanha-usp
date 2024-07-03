@@ -49,3 +49,20 @@ Certifique-se de ter o Node.js e o Expo instalados em sua máquina antes de come
 
 -   🕒 **Histórico:**
 -- Visualizar histórico de vendas realizadas
+
+- Tela de Vendas
+  
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/a7eaf20a-7e46-417a-a666-d62d6c98eeb2)
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/0196226d-97a3-4664-a3c4-24ede8adae98)
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/d64c7deb-569b-4d03-a493-fc30c14c716e)
+
+- Tela de Estoque
+
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/340df467-7a0e-4d48-b625-59d23e0853e2)
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/25c48201-de71-4d2a-abdc-488c960a2fb2)
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/b9345161-f4ca-4069-bf82-b4ebe1f5dc7d)
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/3708cb6e-f659-43fe-bdf9-148e2b1f7004)
+
+- Tela de Histórico
+
+![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/410d53c4-c7ef-4725-89eb-ffed2df08274)
