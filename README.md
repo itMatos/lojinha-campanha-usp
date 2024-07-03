@@ -34,6 +34,13 @@ Certifique-se de ter o Node.js e o Expo instalados em sua máquina antes de come
     npx expo start
     ```
 
+## Tecnologias utilizadas 👨‍💻
+- React Native
+- React Hooks
+- Typescript
+- React Native Paper
+- HTML e CSS
+
 ## Funcionalidades 🚀
 
 -   🛒 **Vendas**
@@ -50,10 +57,14 @@ Certifique-se de ter o Node.js e o Expo instalados em sua máquina antes de come
 -   🕒 **Histórico:**
 -- Visualizar histórico de vendas realizadas
 
+## Imagens 📱
+
 - Tela de Vendas
   
-![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/a7eaf20a-7e46-417a-a666-d62d6c98eeb2)
-![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/0196226d-97a3-4664-a3c4-24ede8adae98)
+<img src="https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/a7eaf20a-7e46-417a-a666-d62d6c98eeb2" width="412px" heigth="914" />
+<img src="https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/0196226d-97a3-4664-a3c4-24ede8adae98" width="412px" heigth="914" />
+
+
 ![image](https://github.com/itMatos/lojinha-campanha-usp/assets/46801239/d64c7deb-569b-4d03-a493-fc30c14c716e)
 
 - Tela de Estoque
